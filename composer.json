@@ -1,0 +1,29 @@
+{
+  "name": "eureka/component-validation",
+  "description": "PHP validation library.",
+  "type": "library",
+  "license": "MIT",
+
+  "authors": [
+    {
+      "name": "Romain Cottard",
+      "role": "Developer"
+    }
+
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "Eureka\\Component\\Validation\\": "./src",
+      "Eureka\\Component\\Validation\\Tests\\": "./tests"
+    }
+  },
+
+  "require": {
+  },
+
+  "require-dev": {
+    "phpunit/phpunit": "^7.1"
+  }
+
+}
