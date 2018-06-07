@@ -24,33 +24,33 @@ class StringValidator extends AbstractValidator implements ValidatorInterface
      */
     public function validate($value, array $options = [], $flags = null)
     {
-        $default = isset($options['default']) ? $options['default'] : null;
+        $default = array_key_exists('default', $options) ? $options['default'] : false;
 
         //~ Validate type
         if (false === is_string($value)) {
-            if (empty($default)) {
-                throw new ValidationException('Given value is not a valid string!');
+            if ($default === false) {
+                throw new ValidationException('Given value is not a string!');
             }
 
-            return $value;
+            return $default;
         }
 
         //~ Validate min length
         if (isset($options['min_length']) && mb_strlen($value) < (int) $options['min_length']) {
-            if (empty($default)) {
+            if ($default === false) {
                 throw new ValidationException('String must have at least ' . $options['min_length'] . ' characters!');
             }
 
-            return $value;
+            return $default;
         }
 
         //~ Validate min length
         if (isset($options['max_length']) && mb_strlen($value) > (int) $options['max_length']) {
-            if (empty($default)) {
+            if ($default === false) {
                 throw new ValidationException('String must have maximum ' . $options['max_length'] . ' characters!');
             }
 
-            return $value;
+            return $default;
         }
 
         return $value;

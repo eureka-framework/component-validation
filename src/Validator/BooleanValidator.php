@@ -25,7 +25,7 @@ class BooleanValidator extends AbstractValidator implements ValidatorInterface
     public function validate($value, array $options = [], $flags = null)
     {
         if ($flags === null) {
-            $flags = !isset($options['default']) ? FILTER_NULL_ON_FAILURE : FILTER_DEFAULT;
+            $flags = !array_key_exists('default', $options) ? FILTER_NULL_ON_FAILURE : FILTER_DEFAULT;
         }
 
         $filteredValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, $this->getOptions($options, $flags));

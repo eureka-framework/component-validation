@@ -13,11 +13,11 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class DateValidator
+ * Class TimeValidator
  *
  * @author Romain Cottard
  */
-class DateValidator extends AbstractValidator implements ValidatorInterface
+class TimeValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
      * @param  string $value
@@ -28,18 +28,18 @@ class DateValidator extends AbstractValidator implements ValidatorInterface
     public function validate($value, array $options = [], $flags = null)
     {
         if (!isset($options['format'])) {
-            $options['format'] = 'Y-m-d';
+            $options['format'] = 'H:i:s';
         }
 
         if (!isset($options['format_output'])) {
-            $options['format_output'] = 'Y-m-d';
+            $options['format_output'] = 'H:i:s';
         }
 
         $date = \DateTimeImmutable::createFromFormat($options['format'], $value);
 
         if (! $date instanceof \DateTimeImmutable) {
             if (!array_key_exists('default', $options)) {
-                throw new ValidationException('Given value is not a valid date according to following format: "' . $options['format'] . '"!');
+                throw new ValidationException('Given value is not a valid time according to following format: "' . $options['format'] . '"!');
             }
 
             return $options['default'];

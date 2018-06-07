@@ -20,6 +20,14 @@ use PHPUnit\Framework\TestCase;
 class BooleanValidatorTest extends TestCase
 {
     /**
+     * @return \Eureka\Component\Validation\ValidatorInterface
+     */
+    public function getValidator()
+    {
+        return new BooleanValidator();
+    }
+
+    /**
      * @param  mixed $value
      * @param  bool $excepted
      * @return void
@@ -27,7 +35,7 @@ class BooleanValidatorTest extends TestCase
      */
     public function testWithValidTrueValues($value, $excepted)
     {
-        $this->assertSame($excepted, (new BooleanValidator())->validate($value));
+        $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
@@ -38,7 +46,7 @@ class BooleanValidatorTest extends TestCase
      */
     public function testWithValidFalseValues($value, $excepted)
     {
-        $this->assertSame($excepted, (new BooleanValidator())->validate($value));
+        $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
@@ -50,7 +58,7 @@ class BooleanValidatorTest extends TestCase
      */
     public function testWithInvalidBooleanValues($value, $excepted)
     {
-        $this->assertSame($excepted, (new BooleanValidator())->validate($value));
+        $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
@@ -62,7 +70,7 @@ class BooleanValidatorTest extends TestCase
      */
     public function testWithInvalidBooleanWithDefaultValues($value, $options, $excepted)
     {
-        $this->assertSame($excepted, (new BooleanValidator())->validate($value, $options));
+        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
@@ -74,7 +82,7 @@ class BooleanValidatorTest extends TestCase
      */
     public function testWithInvalidBooleanWithDefaultForceNullValues($value, $options, $excepted)
     {
-        $this->assertSame($excepted, (new BooleanValidator())->validate($value, $options, FILTER_NULL_ON_FAILURE));
+        $this->assertSame($excepted, $this->getValidator()->validate($value, $options, FILTER_NULL_ON_FAILURE));
     }
 
     /**

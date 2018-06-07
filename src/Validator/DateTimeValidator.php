@@ -31,16 +31,20 @@ class DateTimeValidator extends AbstractValidator implements ValidatorInterface
             $options['format'] = 'Y-m-d H:i:s';
         }
 
+        if (!isset($options['format_output'])) {
+            $options['format_output'] = 'Y-m-d H:i:s';
+        }
+
         $date = \DateTimeImmutable::createFromFormat($options['format'], $value);
 
         if (! $date instanceof \DateTimeImmutable) {
-            if (!isset($options['default'])) {
+            if (!array_key_exists('default', $options)) {
                 throw new ValidationException('Given value is not a valid date time according to following format: "' . $options['format'] . '"!');
             }
 
             return $options['default'];
         }
 
-        return $date->format($options['format']);
+        return $date->format($options['format_output']);
     }
 }

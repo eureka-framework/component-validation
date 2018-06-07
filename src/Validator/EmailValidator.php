@@ -22,7 +22,7 @@ class EmailValidator extends AbstractValidator implements ValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function validate($value, array $options = [], $flags = null)
+    public function validate($value, array $options = [], $flags = FILTER_DEFAULT)
     {
         $filteredValue = filter_var($value, FILTER_VALIDATE_EMAIL, $this->getOptions($options, $flags));
 
