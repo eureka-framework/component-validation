@@ -9,17 +9,31 @@
 
 namespace Eureka\Component\Validation\Entity;
 
+use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorFactory;
+use Eureka\Component\Validation\ValidatorFactoryInterface;
 
 /**
  * Class FormEntity
  *
  * @author Romain Cottard
  */
-class FormEntity
+class FormEntity implements \Iterator
 {
-    /** @var array data */
+    /** @var string[] $keys List of data keys */
+    private $keys = [];
+
+    /** @var string $key Current data key */
+    private $key = '';
+
+    /** @var string[] $errors */
+    private $errors = [];
+
+    /** @var array $data */
     protected $data = [];
+
+    /** @var array $config Validator config */
+    protected $validatorConfig = [];
 
     /** @var ValidatorFactory|null $validatorFactory */
     protected $validatorFactory = null;
@@ -27,16 +41,52 @@ class FormEntity
     /**
      * FormEntity constructor.
      *
+     * @param \Eureka\Component\Validation\ValidatorFactoryInterface $validatorFactory
+     * @param array $validatorConfig
      * @param array $data
-     * @param \Eureka\Component\Validation\ValidatorFactory $validatorFactory
      */
-    public function __construct($data, ValidatorFactory $validatorFactory = null)
+    public function __construct(ValidatorFactoryInterface $validatorFactory, array $validatorConfig, array $data = [])
     {
-        foreach ($data as $name => $value) {
-            $this->set(self::toCamelCase($name), $value);
+        $this->validatorFactory = $validatorFactory;
+
+        foreach ($validatorConfig as $name => $config) {
+            $this->validatorConfig[self::toCamelCase($name)] = $config;
         }
 
-        $this->validatorFactory;
+        if (!empty($data)) {
+            $this->setFromArray($data);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return empty($this->errors);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @param  array $data
+     * @return void
+     */
+    public function setFromArray($data)
+    {
+        foreach ($data as $name => $value) {
+            try {
+                $this->__call(self::toCamelCase($name), $value);
+            } catch (ValidationException $exception) {
+                $this->errors[$name] = $exception->getMessage();
+            }
+        }
     }
 
     /**
@@ -45,6 +95,7 @@ class FormEntity
      * @param  string $name
      * @param  array $arguments
      * @return $this|mixed|null
+     * @throws \LogicException
      */
     public function __call($name, $arguments)
     {
@@ -60,14 +111,54 @@ class FormEntity
                 break;
             case $prefixOriginal === 'has':
             case $prefixOriginal === 'get':
-            return $this->get($methodOriginal);
+                return $this->get($methodOriginal);
                 break;
             case $prefixOriginal === 'set':
                 return $this->set($methodOriginal, ...$arguments);
                 break;
             default:
-                throw new \RuntimeException('Invalid method name.');
+                throw new \LogicException('Invalid method name.');
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function current()
+    {
+        return $this->data[$this->key];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function key()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function next()
+    {
+        $this->key = next($this->keys);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rewind()
+    {
+        $this->key = reset($this->keys);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function valid()
+    {
+        return ($this->keys !== false);
     }
 
     /**
@@ -77,7 +168,15 @@ class FormEntity
      */
     protected function set($name, $value)
     {
-        $this->data[$name] = $value;
+        if (!in_array($name, $this->keys)) {
+            $this->keys[] = $name;
+        }
+
+        if (isset($this->validatorConfig[$name])) {
+            $config    = $this->validatorConfig[$name];
+            $validator = $this->validatorFactory->getValidator(isset($config['type']) ? $config['type'] : 'string');
+            $validator->validate($value, $config['options'] ? $config['options'] : []);
+        }
 
         return $this;
     }

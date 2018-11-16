@@ -18,7 +18,64 @@ use Eureka\Component\Validation\Validator;
  */
 class ValidatorFactory
 {
+    /** @var array $validators */
     protected static $validators = [];
+
+    /**
+     * @param  string $type
+     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @throws \LogicException
+     */
+    public function getValidator($type)
+    {
+        switch ($type)
+        {
+            case 'boolean':
+                return $this->getBooleanValidator();
+                break;
+            case 'datetime':
+                return $this->getDateTimeValidator();
+                break;
+            case 'date':
+                return $this->getDateValidator();
+                break;
+            case 'time':
+                return $this->getTimeValidator();
+                break;
+            case 'timestamp':
+                return $this->getTimestampValidator();
+                break;
+            case 'email':
+                return $this->getEmailValidator();
+                break;
+            case 'float':
+            case 'double':
+            case 'decimal':
+                return $this->getFloatValidator();
+                break;
+            case 'integer':
+                return $this->getIntegerValidator();
+                break;
+            case 'null':
+            case '~':
+                return $this->getNullValidator();
+                break;
+            case 'ip':
+                return $this->getIpValidator();
+                break;
+            case 'regexp':
+                return $this->getRegexpValidator();
+                break;
+            case 'url':
+                return $this->getUrlValidator();
+                break;
+            case 'string':
+                return $this->getStringValidator();
+                break;
+            default:
+                throw new \LogicException('Invalid validator type (type: ' . $type . ')');
+        }
+    }
 
     /**
      * @return \Eureka\Component\Validation\ValidatorInterface
@@ -167,7 +224,7 @@ class ValidatorFactory
     /**
      * @return \Eureka\Component\Validation\ValidatorInterface
      */
-    public function geStringValidator()
+    public function getStringValidator()
     {
         if (!isset(self::$validators['StringValidator'])) {
             self::$validators['StringValidator'] = new Validator\StringValidator();
