@@ -10,15 +10,14 @@
 namespace Eureka\Component\Validation\Entity;
 
 use Eureka\Component\Validation\Exception\ValidationException;
-use Eureka\Component\Validation\ValidatorFactory;
 use Eureka\Component\Validation\ValidatorFactoryInterface;
 
 /**
- * Class FormEntity
+ * Class EntityGeneric
  *
  * @author Romain Cottard
  */
-class FormEntity implements \Iterator
+class GenericEntity implements \Iterator
 {
     /** @var string[] $keys List of data keys */
     private $keys = [];
@@ -35,13 +34,13 @@ class FormEntity implements \Iterator
     /** @var array $config Validator config */
     protected $validatorConfig = [];
 
-    /** @var ValidatorFactory|null $validatorFactory */
-    protected $validatorFactory = null;
+    /** @var ValidatorFactoryInterface $validatorFactory */
+    protected $validatorFactory;
 
     /**
-     * FormEntity constructor.
+     * GenericEntity constructor.
      *
-     * @param \Eureka\Component\Validation\ValidatorFactoryInterface $validatorFactory
+     * @param ValidatorFactoryInterface $validatorFactory
      * @param array $validatorConfig
      * @param array $data
      */
@@ -61,7 +60,7 @@ class FormEntity implements \Iterator
     /**
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return empty($this->errors);
     }
@@ -69,35 +68,37 @@ class FormEntity implements \Iterator
     /**
      * @return string[]
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
     /**
      * @param  array $data
-     * @return void
+     * @return $this
      */
-    public function setFromArray($data)
+    public function setFromArray(array $data): self
     {
         foreach ($data as $name => $value) {
             try {
-                $this->__call(self::toCamelCase($name), $value);
+                $this->set(self::toCamelCase($name), $value);
             } catch (ValidationException $exception) {
                 $this->errors[$name] = $exception->getMessage();
             }
         }
+
+        return $this;
     }
 
     /**
-     * Magic method to have getters & setters for form entity.
+     * Magic method to have getters & setters for generic entity.
      *
      * @param  string $name
      * @param  array $arguments
      * @return $this|mixed|null
      * @throws \LogicException
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, $arguments)
     {
         $prefixOriginal  = substr($name, 0, 3);
         $methodOriginal  = substr($name, 3);
@@ -108,14 +109,11 @@ class FormEntity implements \Iterator
             case $prefixAlternate === 'in':
             case $prefixAlternate === 'is':
                 return $this->get($methodAlternate);
-                break;
             case $prefixOriginal === 'has':
             case $prefixOriginal === 'get':
                 return $this->get($methodOriginal);
-                break;
             case $prefixOriginal === 'set':
                 return $this->set($methodOriginal, ...$arguments);
-                break;
             default:
                 throw new \LogicException('Invalid method name.');
         }
@@ -132,7 +130,7 @@ class FormEntity implements \Iterator
     /**
      * @inheritdoc
      */
-    public function key()
+    public function key(): string
     {
         return $this->key;
     }
@@ -140,7 +138,7 @@ class FormEntity implements \Iterator
     /**
      * @inheritdoc
      */
-    public function next()
+    public function next(): void
     {
         $this->key = next($this->keys);
     }
@@ -148,7 +146,7 @@ class FormEntity implements \Iterator
     /**
      * @inheritdoc
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->key = reset($this->keys);
     }
@@ -166,16 +164,18 @@ class FormEntity implements \Iterator
      * @param  mixed $value
      * @return $this
      */
-    protected function set($name, $value)
+    protected function set(string $name, $value): self
     {
         if (!in_array($name, $this->keys)) {
             $this->keys[] = $name;
         }
 
+        $this->data[$name] = $value;
+
         if (isset($this->validatorConfig[$name])) {
             $config    = $this->validatorConfig[$name];
-            $validator = $this->validatorFactory->getValidator(isset($config['type']) ? $config['type'] : 'string');
-            $validator->validate($value, $config['options'] ? $config['options'] : []);
+            $validator = $this->validatorFactory->getValidator($config['type'] ?? 'string');
+            $validator->validate($value, $config['options'] ?? []);
         }
 
         return $this;
@@ -185,7 +185,7 @@ class FormEntity implements \Iterator
      * @param  string $name
      * @return mixed|null
      */
-    protected function get($name)
+    protected function get(string $name)
     {
         if (!isset($this->data[$name])) {
             return null;
@@ -198,8 +198,8 @@ class FormEntity implements \Iterator
      * @param  string $name
      * @return string
      */
-    protected static function toCamelCase($name)
+    protected static function toCamelCase(string $name)
     {
-        return strtr(ucwords(strtr(strtolower($name), ['_' => ' ', '.' => '_ ', '\\' => '_ ' ])), [' ' => '']);
+        return strtr(ucwords(strtr(strtolower($name), ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
     }
 }

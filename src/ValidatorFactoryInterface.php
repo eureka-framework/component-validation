@@ -18,7 +18,7 @@ interface ValidatorFactoryInterface
 {
     /**
      * @param  string $type
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return ValidatorInterface
      */
-    public function getValidator($type);
+    public function getValidator($type): ValidatorInterface;
 }
