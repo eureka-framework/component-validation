@@ -66,6 +66,18 @@ class GenericEntity implements \Iterator
     }
 
     /**
+     * @param string $name
+     * @param string $error
+     * @return GenericEntity
+     */
+    public function addError(string $name, string $error): self
+    {
+        $this->errors[$name] = $error;
+
+        return $this;
+    }
+
+    /**
      * @return string[]
      */
     public function getErrors(): array
@@ -95,7 +107,7 @@ class GenericEntity implements \Iterator
      *
      * @param  string $name
      * @param  array $arguments
-     * @return $this|mixed|null
+     * @return $this|mixed
      * @throws \LogicException
      */
     public function __call(string $name, $arguments)
