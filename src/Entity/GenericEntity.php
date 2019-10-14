@@ -168,7 +168,7 @@ class GenericEntity implements \Iterator
      */
     public function valid()
     {
-        return ($this->keys !== false);
+        return ($this->key !== false);
     }
 
     /**
