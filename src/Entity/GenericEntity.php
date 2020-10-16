@@ -115,7 +115,7 @@ class GenericEntity
             case $prefixAlternate === 'in':
             case $prefixAlternate === 'is':
             case $prefixOriginal === 'has':
-            return $this->get($name);
+                return $this->get($name);
             case $prefixOriginal === 'get':
                 return $this->get(substr($name, 3));
             case $prefixOriginal === 'set':
