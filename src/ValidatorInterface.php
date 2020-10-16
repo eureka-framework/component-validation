@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation;
 
 /**
@@ -19,9 +21,9 @@ interface ValidatorInterface
     /**
      * @param  mixed $value Value to validate
      * @param  array $options
-     * @param  int   $flags Validation flag. If null, use default flag or validator default flag.
+     * @param  int|null   $flags Validation flag. If null, use default flag or validator default flag.
      * @return mixed Return value
      * @throws \RuntimeException
      */
-    public function validate($value, array $options = [], $flags = null);
+    public function validate($value, array $options = [], int $flags = null);
 }

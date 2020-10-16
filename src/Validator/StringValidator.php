@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
@@ -20,9 +22,13 @@ use Eureka\Component\Validation\ValidatorInterface;
 class StringValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+    /**
+     * @param  mixed $value
+     * @param  array $options
+     * @param  int|null $flags Not used here.
+     * @return mixed Return value
      */
-    public function validate($value, array $options = [], $flags = null)
+    public function validate($value, array $options = [], ?int $flags = null)
     {
         $default = array_key_exists('default', $options) ? $options['default'] : false;
 
@@ -44,7 +50,7 @@ class StringValidator extends AbstractValidator implements ValidatorInterface
             return $default;
         }
 
-        //~ Validate min length
+        //~ Validate max length
         if (isset($options['max_length']) && mb_strlen($value) > (int) $options['max_length']) {
             if ($default === false) {
                 throw new ValidationException('String must have maximum ' . $options['max_length'] . ' characters!');

@@ -7,7 +7,10 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Validator;
+
 /**
  * Class BooleanValidator
  *
@@ -20,9 +23,9 @@ class AbstractValidator
      * @param  int|null $flags
      * @return array
      */
-    protected function getOptions(array $options = [], $flags = FILTER_DEFAULT)
+    protected function getOptions(array $options = [], ?int $flags = FILTER_DEFAULT): array
     {
-        return $validatorOptions = [
+        return [
             'options' => $options,
             'flags'   => $flags,
         ];

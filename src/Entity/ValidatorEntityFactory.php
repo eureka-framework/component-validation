@@ -7,20 +7,22 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Entity;
 
 use Eureka\Component\Validation\ValidatorEntityFactoryInterface;
 use Eureka\Component\Validation\ValidatorFactoryInterface;
 
 /**
- * Class EntityFactory
+ * Class ValidatorEntityFactory
  *
  * @author Romain Cottard
  */
 class ValidatorEntityFactory implements ValidatorEntityFactoryInterface
 {
     /** @var ValidatorFactoryInterface $validatorFactory */
-    protected $validatorFactory;
+    protected ValidatorFactoryInterface $validatorFactory;
 
     /**
      * EntityFactory constructor.

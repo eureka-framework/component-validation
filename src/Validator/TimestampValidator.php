@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
@@ -20,9 +22,13 @@ use Eureka\Component\Validation\ValidatorInterface;
 class TimestampValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+    /**
+     * @param  mixed $value
+     * @param  array $options
+     * @param  int|null $flags Not used here.
+     * @return mixed Return value
      */
-    public function validate($value, array $options = [], $flags = null)
+    public function validate($value, array $options = [], ?int $flags = null)
     {
         $options['min_range'] = 0;
         $options['max_range'] = 2147483647;

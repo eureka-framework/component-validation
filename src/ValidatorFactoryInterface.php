@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation;
 
 /**
@@ -20,5 +22,5 @@ interface ValidatorFactoryInterface
      * @param  string $type
      * @return ValidatorInterface
      */
-    public function getValidator($type): ValidatorInterface;
+    public function getValidator(string $type): ValidatorInterface;
 }

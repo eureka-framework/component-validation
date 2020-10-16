@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
@@ -20,9 +22,12 @@ use Eureka\Component\Validation\ValidatorInterface;
 class BooleanValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @param mixed $value
+     * @param array $options
+     * @param int|null $flags
+     * @return mixed
      */
-    public function validate($value, array $options = [], $flags = null)
+    public function validate($value, array $options = [], ?int $flags = null)
     {
         if ($flags === null) {
             $flags = !array_key_exists('default', $options) ? FILTER_NULL_ON_FAILURE : FILTER_DEFAULT;

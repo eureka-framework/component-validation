@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Entity;
 
 use Eureka\Component\Validation\Exception\ValidationException;
@@ -17,25 +19,19 @@ use Eureka\Component\Validation\ValidatorFactoryInterface;
  *
  * @author Romain Cottard
  */
-class GenericEntity implements \Iterator
+class GenericEntity
 {
-    /** @var string[] $keys List of data keys */
-    private $keys = [];
-
-    /** @var string $key Current data key */
-    private $key = '';
-
     /** @var string[] $errors */
-    private $errors = [];
+    private array $errors = [];
 
     /** @var array $data */
-    protected $data = [];
+    protected array $data = [];
 
     /** @var array $config Validator config */
-    protected $validatorConfig = [];
+    protected array $validatorConfig = [];
 
     /** @var ValidatorFactoryInterface $validatorFactory */
-    protected $validatorFactory;
+    protected ValidatorFactoryInterface $validatorFactory;
 
     /**
      * GenericEntity constructor.
@@ -49,7 +45,7 @@ class GenericEntity implements \Iterator
         $this->validatorFactory = $validatorFactory;
 
         foreach ($validatorConfig as $name => $config) {
-            $this->validatorConfig[self::toCamelCase($name)] = $config;
+            $this->validatorConfig[self::toPascalCase($name)] = $config;
         }
 
         if (!empty($data)) {
@@ -93,9 +89,9 @@ class GenericEntity implements \Iterator
     {
         foreach ($data as $name => $value) {
             try {
-                $this->set(self::toCamelCase($name), $value);
+                $this->set(self::toPascalCase($name), $value);
             } catch (ValidationException $exception) {
-                $this->errors[$name] = $exception->getMessage();
+                $this->addError($name, $exception->getMessage());
             }
         }
 
@@ -110,65 +106,23 @@ class GenericEntity implements \Iterator
      * @return $this|mixed
      * @throws \LogicException
      */
-    public function __call(string $name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         $prefixOriginal  = substr($name, 0, 3);
-        $methodOriginal  = substr($name, 3);
         $prefixAlternate = substr($name, 0, 2);
-        $methodAlternate = substr($name, 2);
 
         switch (true) {
             case $prefixAlternate === 'in':
             case $prefixAlternate === 'is':
-                return $this->get($methodAlternate);
             case $prefixOriginal === 'has':
+            return $this->get($name);
             case $prefixOriginal === 'get':
-                return $this->get($methodOriginal);
+                return $this->get(substr($name, 3));
             case $prefixOriginal === 'set':
-                return $this->set($methodOriginal, ...$arguments);
+                return $this->set(substr($name, 3), ...$arguments);
             default:
                 throw new \LogicException('Invalid method name.');
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function current()
-    {
-        return $this->data[$this->key];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function key(): string
-    {
-        return $this->key;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function next(): void
-    {
-        $this->key = next($this->keys);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rewind(): void
-    {
-        $this->key = reset($this->keys);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function valid()
-    {
-        return ($this->key !== false);
     }
 
     /**
@@ -178,9 +132,7 @@ class GenericEntity implements \Iterator
      */
     protected function set(string $name, $value): self
     {
-        if (!in_array($name, $this->keys)) {
-            $this->keys[] = $name;
-        }
+        $name = self::toPascalCase($name);
 
         $this->data[$name] = $value;
 
@@ -199,6 +151,8 @@ class GenericEntity implements \Iterator
      */
     protected function get(string $name)
     {
+        $name = self::toPascalCase($name);
+
         if (!isset($this->data[$name])) {
             return null;
         }
@@ -210,8 +164,8 @@ class GenericEntity implements \Iterator
      * @param  string $name
      * @return string
      */
-    protected static function toCamelCase(string $name)
+    protected static function toPascalCase(string $name)
     {
-        return strtr(ucwords(strtr(strtolower($name), ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
+        return strtr(ucwords(strtr($name, ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
     }
 }

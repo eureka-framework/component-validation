@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation;
 
 use Eureka\Component\Validation\Validator;
@@ -19,16 +21,16 @@ use Eureka\Component\Validation\Validator;
 class ValidatorFactory implements ValidatorFactoryInterface
 {
     /** @var ValidatorInterface[] $validators */
-    protected static $validators = [];
+    protected static array $validators = [];
 
     /**
      * @param  string $type
      * @return ValidatorInterface
      * @throws \LogicException
      */
-    public function getValidator($type): ValidatorInterface
+    public function getValidator(string $type): ValidatorInterface
     {
-        switch ((string) $type) {
+        switch ($type) {
             case 'boolean':
                 return $this->getBooleanValidator();
             case 'datetime':

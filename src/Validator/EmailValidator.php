@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Eureka\Component\Validation\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
@@ -20,9 +22,12 @@ use Eureka\Component\Validation\ValidatorInterface;
 class EmailValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @param  mixed $value
+     * @param  array $options
+     * @param  int|null $flags Not used here.
+     * @return mixed Return value
      */
-    public function validate($value, array $options = [], $flags = FILTER_DEFAULT)
+    public function validate($value, array $options = [], ?int $flags = FILTER_DEFAULT)
     {
         $filteredValue = filter_var($value, FILTER_VALIDATE_EMAIL, $this->getOptions($options, $flags));
 
