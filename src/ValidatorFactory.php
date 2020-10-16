@@ -16,71 +16,58 @@ use Eureka\Component\Validation\Validator;
  *
  * @author Romain Cottard
  */
-class ValidatorFactory
+class ValidatorFactory implements ValidatorFactoryInterface
 {
-    /** @var array $validators */
+    /** @var ValidatorInterface[] $validators */
     protected static $validators = [];
 
     /**
      * @param  string $type
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return ValidatorInterface
      * @throws \LogicException
      */
-    public function getValidator($type)
+    public function getValidator($type): ValidatorInterface
     {
-        switch ($type)
-        {
+        switch ((string) $type) {
             case 'boolean':
                 return $this->getBooleanValidator();
-                break;
             case 'datetime':
                 return $this->getDateTimeValidator();
-                break;
             case 'date':
                 return $this->getDateValidator();
-                break;
             case 'time':
                 return $this->getTimeValidator();
-                break;
             case 'timestamp':
                 return $this->getTimestampValidator();
-                break;
             case 'email':
                 return $this->getEmailValidator();
-                break;
             case 'float':
             case 'double':
             case 'decimal':
                 return $this->getFloatValidator();
-                break;
             case 'integer':
                 return $this->getIntegerValidator();
-                break;
             case 'null':
             case '~':
+            case '':
                 return $this->getNullValidator();
-                break;
             case 'ip':
                 return $this->getIpValidator();
-                break;
             case 'regexp':
                 return $this->getRegexpValidator();
-                break;
             case 'url':
                 return $this->getUrlValidator();
-                break;
             case 'string':
                 return $this->getStringValidator();
-                break;
             default:
                 throw new \LogicException('Invalid validator type (type: ' . $type . ')');
         }
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\BooleanValidator
      */
-    public function getBooleanValidator()
+    public function getBooleanValidator(): Validator\BooleanValidator
     {
         if (!isset(self::$validators['BooleanValidator'])) {
             self::$validators['BooleanValidator'] = new Validator\BooleanValidator();
@@ -90,9 +77,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\DateTimeValidator
      */
-    public function getDateTimeValidator()
+    public function getDateTimeValidator(): Validator\DateTimeValidator
     {
         if (!isset(self::$validators['DateTimeValidator'])) {
             self::$validators['DateTimeValidator'] = new Validator\DateTimeValidator();
@@ -102,9 +89,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\DateValidator
      */
-    public function getDateValidator()
+    public function getDateValidator(): Validator\DateValidator
     {
         if (!isset(self::$validators['DateValidator'])) {
             self::$validators['DateValidator'] = new Validator\DateValidator();
@@ -114,9 +101,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\TimeValidator
      */
-    public function getTimeValidator()
+    public function getTimeValidator(): Validator\TimeValidator
     {
         if (!isset(self::$validators['TimeValidator'])) {
             self::$validators['TimeValidator'] = new Validator\TimeValidator();
@@ -126,9 +113,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\TimestampValidator
      */
-    public function getTimestampValidator()
+    public function getTimestampValidator(): Validator\TimestampValidator
     {
         if (!isset(self::$validators['TimestampValidator'])) {
             self::$validators['TimestampValidator'] = new Validator\TimestampValidator();
@@ -138,9 +125,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\EmailValidator
      */
-    public function getEmailValidator()
+    public function getEmailValidator(): Validator\EmailValidator
     {
         if (!isset(self::$validators['EmailValidator'])) {
             self::$validators['EmailValidator'] = new Validator\EmailValidator();
@@ -150,9 +137,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\FloatValidator
      */
-    public function getFloatValidator()
+    public function getFloatValidator(): Validator\FloatValidator
     {
         if (!isset(self::$validators['FloatValidator'])) {
             self::$validators['FloatValidator'] = new Validator\FloatValidator();
@@ -162,9 +149,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\IntegerValidator
      */
-    public function getIntegerValidator()
+    public function getIntegerValidator(): Validator\IntegerValidator
     {
         if (!isset(self::$validators['IntegerValidator'])) {
             self::$validators['IntegerValidator'] = new Validator\IntegerValidator();
@@ -174,9 +161,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\NullValidator
      */
-    public function getNullValidator()
+    public function getNullValidator(): Validator\NullValidator
     {
         if (!isset(self::$validators['NullValidator'])) {
             self::$validators['NullValidator'] = new Validator\NullValidator();
@@ -186,9 +173,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\IpValidator
      */
-    public function getIpValidator()
+    public function getIpValidator(): Validator\IpValidator
     {
         if (!isset(self::$validators['IpValidator'])) {
             self::$validators['IpValidator'] = new Validator\IpValidator();
@@ -198,9 +185,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\RegexpValidator
      */
-    public function getRegexpValidator()
+    public function getRegexpValidator(): Validator\RegexpValidator
     {
         if (!isset(self::$validators['RegexpValidator'])) {
             self::$validators['RegexpValidator'] = new Validator\RegexpValidator();
@@ -210,9 +197,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\UrlValidator
      */
-    public function getUrlValidator()
+    public function getUrlValidator(): Validator\UrlValidator
     {
         if (!isset(self::$validators['UrlValidator'])) {
             self::$validators['UrlValidator'] = new Validator\UrlValidator();
@@ -222,9 +209,9 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Eureka\Component\Validation\ValidatorInterface
+     * @return Validator\StringValidator
      */
-    public function getStringValidator()
+    public function getStringValidator(): Validator\StringValidator
     {
         if (!isset(self::$validators['StringValidator'])) {
             self::$validators['StringValidator'] = new Validator\StringValidator();

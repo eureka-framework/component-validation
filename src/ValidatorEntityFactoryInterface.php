@@ -10,15 +10,16 @@
 namespace Eureka\Component\Validation;
 
 /**
- * Interface Validator Factory for Validator Factory classes
+ * Class ValidatorEntityFactoryInterface
  *
  * @author Romain Cottard
  */
-interface ValidatorFactoryInterface
+interface ValidatorEntityFactoryInterface
 {
     /**
-     * @param  string $type
-     * @return ValidatorInterface
+     * @param array $config
+     * @param array $data
+     * @return Entity\GenericEntity
      */
-    public function getValidator($type): ValidatorInterface;
+    public function createGeneric(array $config, array $data = []): Entity\GenericEntity;
 }
