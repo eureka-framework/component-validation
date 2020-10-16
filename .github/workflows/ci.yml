@@ -36,7 +36,7 @@ jobs:
       - name: Units Tests
         run: |
           make tests
-          sed -i 's+/home/runner/work/component-web/component-web+/github/workspace+g' build/reports/phpunit/clover.xml
+          sed -i 's+/home/runner/work/component-validation/component-validation+/github/workspace+g' build/reports/phpunit/clover.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.4
