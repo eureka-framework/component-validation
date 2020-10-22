@@ -136,7 +136,7 @@ class GenericEntity
 
         $this->data[$name] = $value;
 
-        if (isset($this->validatorConfig[$name])) {
+        if (isset($this->validatorConfig[$name]) && $value !== null) {
             $config    = $this->validatorConfig[$name];
             $validator = $this->validatorFactory->getValidator($config['type'] ?? 'string');
             $validator->validate($value, $config['options'] ?? []);
