@@ -33,19 +33,23 @@ jobs:
       - name: Check Code Style
         run: make phpcs
 
+      - name: Units Tests
+        run: make tests
+
+      - name: Fix unit tests report path
+        run: sed -i 's+'$GITHUB_WORKSPACE'+/github/workspace+g' build/reports/phpunit/clover.xml
+
       - name: PHP 7.4 Compatibility
         run: make php74compatibility
 
       - name: PHP 8.1 Compatibility
         run: make php81compatibility
 
-      - name: Units Tests
-        run: |
-          make tests
-          sed -i 's+/home/runner/work/component-validation/component-validation+/github/workspace+g' build/reports/phpunit/clover.xml
+      - name: PHP Static Analyzis
+        run: make analyze
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.4
+        uses: SonarSource/sonarcloud-github-action@v1.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
