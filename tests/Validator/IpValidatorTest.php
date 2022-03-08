@@ -26,7 +26,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new IpValidator();
     }
@@ -37,7 +37,7 @@ class IpValidatorTest extends TestCase
      * @return void
      * @dataProvider validValuesProvider
      */
-    public function testWithValidValues($value, $excepted)
+    public function testWithValidValues($value, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
@@ -48,7 +48,7 @@ class IpValidatorTest extends TestCase
      * @return void
      * @dataProvider invalidValuesProvider
      */
-    public function testWithInvalidValues($value, $excepted)
+    public function testWithInvalidValues($value, $excepted): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame($excepted, $this->getValidator()->validate($value));
@@ -56,24 +56,24 @@ class IpValidatorTest extends TestCase
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  mixed $excepted
      * @return void
      * @dataProvider validValuesWithOptionsProvider
      */
-    public function testWithValidValueAndDefaultValues($value, array $options, $excepted)
+    public function testWithValidValueAndDefaultValues($value, array $options, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  mixed $excepted
      * @return void
      * @dataProvider invalidValuesWithOptionsProvider
      */
-    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted)
+    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
@@ -81,7 +81,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testIpNotInReservedNorPrivateRangesWithPublicIp()
+    public function testIpNotInReservedNorPrivateRangesWithPublicIp(): void
     {
         $this->assertSame('193.1.2.3', $this->getValidator()->validate('193.1.2.3', [], FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
     }
@@ -89,7 +89,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testIpNotInReservedRangeWithReservedIp()
+    public function testIpNotInReservedRangeWithReservedIp(): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame('240.0.0.1', $this->getValidator()->validate('240.0.0.1', [], FILTER_FLAG_NO_RES_RANGE));
@@ -98,7 +98,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testIpNotInPrivateRangeWithPrivateIp()
+    public function testIpNotInPrivateRangeWithPrivateIp(): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame('172.16.0.1', $this->getValidator()->validate('172.16.0.1', [], FILTER_FLAG_NO_PRIV_RANGE));
@@ -107,7 +107,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testIpV6WithValidValue()
+    public function testIpV6WithValidValue(): void
     {
         $this->assertSame('2001:0db8:0000:85a3:0000:0000:ac1f:8001', $this->getValidator()->validate('2001:0db8:0000:85a3:0000:0000:ac1f:8001', [], FILTER_FLAG_IPV6));
         $this->assertSame('2001:db8:0:85a3:0:0:ac1f:8001', $this->getValidator()->validate('2001:db8:0:85a3:0:0:ac1f:8001', [], FILTER_FLAG_IPV6));
@@ -116,16 +116,16 @@ class IpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testIpV6WithInvalidValue()
+    public function testIpV6WithInvalidValue(): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame('test:0db8:0000:85a3:0000:0000:ac1f:8001', $this->getValidator()->validate('test:0db8:0000:85a3:0000:0000:ac1f:8001', [], FILTER_FLAG_IPV4));
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider()
+    public function validValuesProvider(): array
     {
         return [
             ['192.168.0.1',     '192.168.0.1'],
@@ -135,9 +135,9 @@ class IpValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider()
+    public function invalidValuesProvider(): array
     {
         return [
             ['192.168.0.256',   false],
@@ -146,9 +146,9 @@ class IpValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function validValuesWithOptionsProvider()
+    public function validValuesWithOptionsProvider(): array
     {
         return [
             ['192.168.0.1',     ['default' => null], '192.168.0.1'],
@@ -158,9 +158,9 @@ class IpValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function invalidValuesWithOptionsProvider()
+    public function invalidValuesWithOptionsProvider(): array
     {
         return [
             ['192.168.0.256', ['default' => null], null],

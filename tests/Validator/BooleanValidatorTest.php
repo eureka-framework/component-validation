@@ -26,7 +26,7 @@ class BooleanValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new BooleanValidator();
     }
@@ -37,7 +37,7 @@ class BooleanValidatorTest extends TestCase
      * @return void
      * @dataProvider validTrueValuesProvider
      */
-    public function testWithValidTrueValues($value, bool $excepted)
+    public function testWithValidTrueValues($value, bool $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
@@ -48,7 +48,7 @@ class BooleanValidatorTest extends TestCase
      * @return void
      * @dataProvider validFalseValuesProvider
      */
-    public function testWithValidFalseValues($value, bool $excepted)
+    public function testWithValidFalseValues($value, bool $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
@@ -59,7 +59,7 @@ class BooleanValidatorTest extends TestCase
      * @return void
      * @dataProvider invalidBooleanValuesProvider
      */
-    public function testWithInvalidBooleanValues($value, bool $excepted)
+    public function testWithInvalidBooleanValues($value, bool $excepted): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame($excepted, $this->getValidator()->validate($value));
@@ -67,32 +67,32 @@ class BooleanValidatorTest extends TestCase
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  bool $excepted
      * @return void
      * @dataProvider invalidBooleanValuesWithOptionsProvider
      */
-    public function testWithInvalidBooleanWithDefaultValues($value, array $options, bool $excepted)
+    public function testWithInvalidBooleanWithDefaultValues($value, array $options, bool $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  bool $excepted
      * @return void
      * @dataProvider invalidBooleanValuesWithOptionsProvider
      */
-    public function testWithInvalidBooleanWithDefaultForceNullValues($value, array $options, bool $excepted)
+    public function testWithInvalidBooleanWithDefaultForceNullValues($value, array $options, bool $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options, FILTER_NULL_ON_FAILURE));
     }
 
     /**
-     * @return array
+     * @return array<int, array<int, string|bool|int|null>>
      */
-    public function validTrueValuesProvider()
+    public function validTrueValuesProvider(): array
     {
         return [
             ['yes', true],
@@ -107,9 +107,9 @@ class BooleanValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function validFalseValuesProvider()
+    public function validFalseValuesProvider(): array
     {
         return [
             ['no', false],
@@ -127,9 +127,9 @@ class BooleanValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidBooleanValuesProvider()
+    public function invalidBooleanValuesProvider(): array
     {
         return [
             ['non', false],
@@ -143,9 +143,9 @@ class BooleanValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function invalidBooleanValuesWithOptionsProvider()
+    public function invalidBooleanValuesWithOptionsProvider(): array
     {
         return [
             ['non', ['default' => false], false],

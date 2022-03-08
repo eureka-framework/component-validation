@@ -19,9 +19,9 @@ namespace Eureka\Component\Validation;
 interface ValidatorInterface
 {
     /**
-     * @param  mixed $value Value to validate
-     * @param  array $options
-     * @param  int|null   $flags Validation flag. If null, use default flag or validator default flag.
+     * @param mixed $value Value to validate
+     * @param array<string,string|null|int|float|bool> $options
+     * @param int|null   $flags Validation flag. If null, use default flag or validator default flag.
      * @return mixed Return value
      * @throws \RuntimeException
      */

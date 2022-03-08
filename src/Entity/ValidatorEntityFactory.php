@@ -35,8 +35,8 @@ class ValidatorEntityFactory implements ValidatorEntityFactoryInterface
     }
 
     /**
-     * @param array $config
-     * @param array $data
+     * @param array<string, array<string, array<string, int|float|bool|string|null>|int|float|bool|string|null>> $config
+     * @param array<string, int|float|bool|string|null> $data
      * @return GenericEntity
      */
     public function createGeneric(array $config, array $data = []): GenericEntity

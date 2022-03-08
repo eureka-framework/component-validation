@@ -26,7 +26,7 @@ class RegexpValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new RegexpValidator();
     }
@@ -34,7 +34,7 @@ class RegexpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testWithValidValue()
+    public function testWithValidValue(): void
     {
         $text = 'The test passed!';
         $this->assertSame($text, $this->getValidator()->validate($text, ['regexp' => '`(.*)passed!`']));
@@ -43,7 +43,7 @@ class RegexpValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testWithEmptyStringValue()
+    public function testWithEmptyStringValue(): void
     {
         $text = 'The test failed!';
         $this->expectException(ValidationException::class);

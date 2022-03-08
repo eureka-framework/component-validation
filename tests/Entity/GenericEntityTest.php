@@ -18,16 +18,16 @@ use Eureka\Component\Validation\ValidatorFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class FactoryValidatorTest
+ * Class GenericEntityTest
  *
  * @author Romain Cottard
  */
-class FactoryValidatorTest extends TestCase
+class GenericEntityTest extends TestCase
 {
     /**
      * @return void
      */
-    public function testICanInstantiateAValidEntity()
+    public function testICanInstantiateAValidEntity(): void
     {
         $data = [
             'userId'     => 1,
@@ -52,7 +52,7 @@ class FactoryValidatorTest extends TestCase
         $this->assertNull($entity->getAny());
     }
 
-    public function testIHaveAnExceptionWhenITryToGetValueWithAnInvalidMethodName()
+    public function testIHaveAnExceptionWhenITryToGetValueWithAnInvalidMethodName(): void
     {
         $entityFactory = new ValidatorEntityFactory(new ValidatorFactory());
         $entity = $entityFactory->createGeneric([], []);
@@ -64,7 +64,7 @@ class FactoryValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testICanInstantiateAnInvalidEntity()
+    public function testICanInstantiateAnInvalidEntity(): void
     {
         $data = [
             'userId'     => 1,

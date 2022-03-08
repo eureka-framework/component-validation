@@ -26,7 +26,7 @@ class UrlValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new UrlValidator();
     }
@@ -37,7 +37,7 @@ class UrlValidatorTest extends TestCase
      * @return void
      * @dataProvider validValuesProvider
      */
-    public function testWithValidValues($value, $excepted)
+    public function testWithValidValues($value, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
@@ -48,16 +48,16 @@ class UrlValidatorTest extends TestCase
      * @return void
      * @dataProvider invalidValuesProvider
      */
-    public function testWithInvalidValues($value, $excepted)
+    public function testWithInvalidValues($value, $excepted): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider()
+    public function validValuesProvider(): array
     {
         return [
             ['http://www.math.uio.no.example.net/faq/compression-faq/part1.html', 'http://www.math.uio.no.example.net/faq/compression-faq/part1.html'],
@@ -76,9 +76,9 @@ class UrlValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider()
+    public function invalidValuesProvider(): array
     {
         return [
 

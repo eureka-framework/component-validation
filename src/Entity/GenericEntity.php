@@ -24,10 +24,11 @@ class GenericEntity
     /** @var string[] $errors */
     private array $errors = [];
 
-    /** @var array $data */
+    /** @var array<string, int|float|bool|string|null> $data */
     protected array $data = [];
 
-    /** @var array $config Validator config */
+    /** @var array<string, array<string, array<string, int|float|bool|string|null>|int|float|bool|string|null>> $validatorConfig Validator config
+     */
     protected array $validatorConfig = [];
 
     /** @var ValidatorFactoryInterface $validatorFactory */
@@ -37,8 +38,8 @@ class GenericEntity
      * GenericEntity constructor.
      *
      * @param ValidatorFactoryInterface $validatorFactory
-     * @param array $validatorConfig
-     * @param array $data
+     * @param array<string, array<string, array<string, int|float|bool|string|null>|int|float|bool|string|null>> $validatorConfig
+     * @param array<string, int|float|bool|string|null> $data
      */
     public function __construct(ValidatorFactoryInterface $validatorFactory, array $validatorConfig, array $data = [])
     {
@@ -82,7 +83,7 @@ class GenericEntity
     }
 
     /**
-     * @param  array $data
+     * @param  array<string, int|float|bool|string|null> $data
      * @return $this
      */
     public function setFromArray(array $data): self
@@ -102,8 +103,8 @@ class GenericEntity
      * Magic method to have getters & setters for generic entity.
      *
      * @param  string $name
-     * @param  array $arguments
-     * @return $this|mixed
+     * @param  array<int, int|float|bool|string|null> $arguments
+     * @return $this|int|float|bool|string|null
      * @throws \LogicException
      */
     public function __call(string $name, array $arguments)
@@ -127,7 +128,7 @@ class GenericEntity
 
     /**
      * @param  string $name
-     * @param  mixed $value
+     * @param  int|float|bool|string|null $value
      * @return $this
      */
     protected function set(string $name, $value): self
@@ -138,8 +139,12 @@ class GenericEntity
 
         if (isset($this->validatorConfig[$name]) && $value !== null) {
             $config    = $this->validatorConfig[$name];
-            $validator = $this->validatorFactory->getValidator($config['type'] ?? 'string');
-            $validator->validate($value, $config['options'] ?? []);
+            /** @var string $type */
+            $type      = $config['type'] ?? 'string';
+            /** @var array<string, int|float|bool|string|null> $options */
+            $options   = $config['options'] ?? [];
+            $validator = $this->validatorFactory->getValidator($type);
+            $validator->validate($value, $options);
         }
 
         return $this;
@@ -147,7 +152,7 @@ class GenericEntity
 
     /**
      * @param  string $name
-     * @return mixed|null
+     * @return int|float|bool|string|null
      */
     protected function get(string $name)
     {
@@ -164,7 +169,7 @@ class GenericEntity
      * @param  string $name
      * @return string
      */
-    protected static function toPascalCase(string $name)
+    protected static function toPascalCase(string $name): string
     {
         return strtr(ucwords(strtr($name, ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
     }

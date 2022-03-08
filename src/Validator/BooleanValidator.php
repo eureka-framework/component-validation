@@ -23,16 +23,17 @@ class BooleanValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
      * @param mixed $value
-     * @param array $options
+     * @param array<string,string|null|int|float|bool> $options
      * @param int|null $flags
-     * @return mixed
+     * @return bool|null
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate($value, array $options = [], ?int $flags = null): ?bool
     {
         if ($flags === null) {
             $flags = !array_key_exists('default', $options) ? FILTER_NULL_ON_FAILURE : FILTER_DEFAULT;
         }
 
+        /** @var bool|null $filteredValue */
         $filteredValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, $this->getOptions($options, $flags));
 
         if (null === $filteredValue) {

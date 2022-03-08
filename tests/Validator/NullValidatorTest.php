@@ -26,7 +26,7 @@ class NullValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new NullValidator();
     }
@@ -34,7 +34,7 @@ class NullValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testWithNullValue()
+    public function testWithNullValue(): void
     {
         $this->assertSame(null, $this->getValidator()->validate(null));
     }
@@ -42,7 +42,7 @@ class NullValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testWithEmptyStringValue()
+    public function testWithEmptyStringValue(): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame(null, $this->getValidator()->validate(''));

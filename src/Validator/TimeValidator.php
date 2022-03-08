@@ -22,13 +22,12 @@ use Eureka\Component\Validation\ValidatorInterface;
 class TimeValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-    /**
-     * @param  mixed $value
-     * @param  array $options
+     * @param  string $value
+     * @param  array<string,string> $options
      * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @return string|null Return value
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate($value, array $options = [], ?int $flags = null): ?string
     {
         if (!isset($options['format'])) {
             $options['format'] = 'H:i:s';
@@ -38,7 +37,7 @@ class TimeValidator extends AbstractValidator implements ValidatorInterface
             $options['format_output'] = 'H:i:s';
         }
 
-        $date = \DateTimeImmutable::createFromFormat($options['format'], $value);
+        $date = \DateTimeImmutable::createFromFormat($options['format'], (string) $value);
 
         if (! $date instanceof \DateTimeImmutable) {
             if (!array_key_exists('default', $options)) {

@@ -34,7 +34,7 @@ class IntegerValidator extends AbstractValidator implements ValidatorInterface
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|float|int|bool|null> $options
      * @param  int|null $flags Not used here.
      * @return mixed Return value
      */

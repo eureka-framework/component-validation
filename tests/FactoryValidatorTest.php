@@ -25,6 +25,7 @@ use Eureka\Component\Validation\Validator\TimestampValidator;
 use Eureka\Component\Validation\Validator\TimeValidator;
 use Eureka\Component\Validation\Validator\UrlValidator;
 use Eureka\Component\Validation\ValidatorFactory;
+use Eureka\Component\Validation\ValidatorInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,12 +48,12 @@ class FactoryValidatorTest extends TestCase
 
     /**
      * @param string $type
-     * @param string $expectedClass
+     * @param class-string<ValidatorInterface> $expectedClass
      * @return void
      *
      * @dataProvider dataProviderFactory
      */
-    public function testICanGetValidatorWithFactory(string $type, string $expectedClass)
+    public function testICanGetValidatorWithFactory(string $type, string $expectedClass): void
     {
         $validator = $this->factory->getValidator($type);
         $this->assertInstanceOf($expectedClass, $validator);
@@ -61,7 +62,7 @@ class FactoryValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testIHaveAnExceptionWhenITryToGetValidatorWithInvalidType()
+    public function testIHaveAnExceptionWhenITryToGetValidatorWithInvalidType(): void
     {
         $this->expectException(\LogicException::class);
         $this->factory->getValidator('unknown');
@@ -70,7 +71,7 @@ class FactoryValidatorTest extends TestCase
     /**
      * @return string[][]
      */
-    public function dataProviderFactory()
+    public function dataProviderFactory(): array
     {
         return [
             ['boolean', BooleanValidator::class],

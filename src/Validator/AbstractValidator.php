@@ -19,9 +19,9 @@ namespace Eureka\Component\Validation\Validator;
 class AbstractValidator
 {
     /**
-     * @param  array $options
+     * @param  array<string,string|float|int|bool|null> $options
      * @param  int|null $flags
-     * @return array
+     * @return array<string,int|null|array<string,string|float|int|bool|null>>
      */
     protected function getOptions(array $options = [], ?int $flags = FILTER_DEFAULT): array
     {

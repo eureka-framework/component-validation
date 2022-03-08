@@ -26,7 +26,7 @@ class TimestampValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new TimestampValidator();
     }
@@ -37,7 +37,7 @@ class TimestampValidatorTest extends TestCase
      * @return void
      * @dataProvider validValuesProvider
      */
-    public function testWithValidValues($value, $excepted)
+    public function testWithValidValues($value, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
@@ -48,7 +48,7 @@ class TimestampValidatorTest extends TestCase
      * @return void
      * @dataProvider invalidValuesProvider
      */
-    public function testWithInvalidValues($value, $excepted)
+    public function testWithInvalidValues($value, $excepted): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame($excepted, $this->getValidator()->validate($value));
@@ -56,24 +56,24 @@ class TimestampValidatorTest extends TestCase
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  mixed $excepted
      * @return void
      * @dataProvider validValuesWithOptionsProvider
      */
-    public function testWithValidValueAndDefaultValues($value, array $options, $excepted)
+    public function testWithValidValueAndDefaultValues($value, array $options, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  mixed $excepted
      * @return void
      * @dataProvider invalidValuesWithOptionsProvider
      */
-    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted)
+    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
@@ -81,23 +81,23 @@ class TimestampValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testWithOctalValueAsValidValues()
+    public function testWithOctalValueAsValidValues(): void
     {
-        $this->assertSame(octdec(777), $this->getValidator()->validate(0777, [], FILTER_FLAG_ALLOW_OCTAL));
+        $this->assertSame(octdec('777'), $this->getValidator()->validate(0777, [], FILTER_FLAG_ALLOW_OCTAL));
     }
 
     /**
      * @return void
      */
-    public function testWithHexaValueAsValidValues()
+    public function testWithHexadecimalValueAsValidValues(): void
     {
         $this->assertSame(hexdec('fa11'), $this->getValidator()->validate('0xfa11', [], FILTER_FLAG_ALLOW_HEX));
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider()
+    public function validValuesProvider(): array
     {
         return [
             [0.0,  0],
@@ -108,9 +108,9 @@ class TimestampValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider()
+    public function invalidValuesProvider(): array
     {
         return [
             [-1,  false],
@@ -120,9 +120,9 @@ class TimestampValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function validValuesWithOptionsProvider()
+    public function validValuesWithOptionsProvider(): array
     {
         $default = -1;
         $options = ['default' => $default];
@@ -135,9 +135,9 @@ class TimestampValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function invalidValuesWithOptionsProvider()
+    public function invalidValuesWithOptionsProvider(): array
     {
         $default = 0;
         $options = ['default' => $default];

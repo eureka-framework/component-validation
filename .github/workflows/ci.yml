@@ -30,8 +30,14 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: make install
 
-      - name: Tests Statics (Code Style check)
+      - name: Check Code Style
         run: make phpcs
+
+      - name: PHP 7.4 Compatibility
+        run: make php74compatibility
+
+      - name: PHP 8.1 Compatibility
+        run: make php81compatibility
 
       - name: Units Tests
         run: |

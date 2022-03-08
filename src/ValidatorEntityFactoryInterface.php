@@ -19,8 +19,8 @@ namespace Eureka\Component\Validation;
 interface ValidatorEntityFactoryInterface
 {
     /**
-     * @param array $config
-     * @param array $data
+     * @param array<string,mixed> $config
+     * @param array<string,mixed> $data
      * @return Entity\GenericEntity
      */
     public function createGeneric(array $config, array $data = []): Entity\GenericEntity;

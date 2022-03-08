@@ -20,7 +20,8 @@ use Eureka\Component\Validation\Validator;
  */
 class ValidatorFactory implements ValidatorFactoryInterface
 {
-    /** @var ValidatorInterface[] $validators */
+    /** @var ValidatorInterface[] $validators
+     */
     protected static array $validators = [];
 
     /**
@@ -66,10 +67,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         }
     }
 
-    /**
-     * @return Validator\BooleanValidator
-     */
-    public function getBooleanValidator(): Validator\BooleanValidator
+    public function getBooleanValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['BooleanValidator'])) {
             self::$validators['BooleanValidator'] = new Validator\BooleanValidator();
@@ -78,10 +76,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['BooleanValidator'];
     }
 
-    /**
-     * @return Validator\DateTimeValidator
-     */
-    public function getDateTimeValidator(): Validator\DateTimeValidator
+    public function getDateTimeValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['DateTimeValidator'])) {
             self::$validators['DateTimeValidator'] = new Validator\DateTimeValidator();
@@ -90,10 +85,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['DateTimeValidator'];
     }
 
-    /**
-     * @return Validator\DateValidator
-     */
-    public function getDateValidator(): Validator\DateValidator
+    public function getDateValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['DateValidator'])) {
             self::$validators['DateValidator'] = new Validator\DateValidator();
@@ -102,10 +94,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['DateValidator'];
     }
 
-    /**
-     * @return Validator\TimeValidator
-     */
-    public function getTimeValidator(): Validator\TimeValidator
+    public function getTimeValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['TimeValidator'])) {
             self::$validators['TimeValidator'] = new Validator\TimeValidator();
@@ -114,10 +103,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['TimeValidator'];
     }
 
-    /**
-     * @return Validator\TimestampValidator
-     */
-    public function getTimestampValidator(): Validator\TimestampValidator
+    public function getTimestampValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['TimestampValidator'])) {
             self::$validators['TimestampValidator'] = new Validator\TimestampValidator();
@@ -126,10 +112,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['TimestampValidator'];
     }
 
-    /**
-     * @return Validator\EmailValidator
-     */
-    public function getEmailValidator(): Validator\EmailValidator
+    public function getEmailValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['EmailValidator'])) {
             self::$validators['EmailValidator'] = new Validator\EmailValidator();
@@ -138,10 +121,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['EmailValidator'];
     }
 
-    /**
-     * @return Validator\FloatValidator
-     */
-    public function getFloatValidator(): Validator\FloatValidator
+    public function getFloatValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['FloatValidator'])) {
             self::$validators['FloatValidator'] = new Validator\FloatValidator();
@@ -150,10 +130,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['FloatValidator'];
     }
 
-    /**
-     * @return Validator\IntegerValidator
-     */
-    public function getIntegerValidator(): Validator\IntegerValidator
+    public function getIntegerValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['IntegerValidator'])) {
             self::$validators['IntegerValidator'] = new Validator\IntegerValidator();
@@ -162,10 +139,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['IntegerValidator'];
     }
 
-    /**
-     * @return Validator\NullValidator
-     */
-    public function getNullValidator(): Validator\NullValidator
+    public function getNullValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['NullValidator'])) {
             self::$validators['NullValidator'] = new Validator\NullValidator();
@@ -174,10 +148,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['NullValidator'];
     }
 
-    /**
-     * @return Validator\IpValidator
-     */
-    public function getIpValidator(): Validator\IpValidator
+    public function getIpValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['IpValidator'])) {
             self::$validators['IpValidator'] = new Validator\IpValidator();
@@ -186,10 +157,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['IpValidator'];
     }
 
-    /**
-     * @return Validator\RegexpValidator
-     */
-    public function getRegexpValidator(): Validator\RegexpValidator
+    public function getRegexpValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['RegexpValidator'])) {
             self::$validators['RegexpValidator'] = new Validator\RegexpValidator();
@@ -198,10 +166,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['RegexpValidator'];
     }
 
-    /**
-     * @return Validator\UrlValidator
-     */
-    public function getUrlValidator(): Validator\UrlValidator
+    public function getUrlValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['UrlValidator'])) {
             self::$validators['UrlValidator'] = new Validator\UrlValidator();
@@ -210,10 +175,7 @@ class ValidatorFactory implements ValidatorFactoryInterface
         return self::$validators['UrlValidator'];
     }
 
-    /**
-     * @return Validator\StringValidator
-     */
-    public function getStringValidator(): Validator\StringValidator
+    public function getStringValidator(): ValidatorInterface
     {
         if (!isset(self::$validators['StringValidator'])) {
             self::$validators['StringValidator'] = new Validator\StringValidator();

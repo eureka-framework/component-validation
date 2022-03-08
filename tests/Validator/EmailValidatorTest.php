@@ -26,7 +26,7 @@ class EmailValidatorTest extends TestCase
     /**
      * @return ValidatorInterface
      */
-    public function getValidator()
+    public function getValidator(): ValidatorInterface
     {
         return new EmailValidator();
     }
@@ -37,7 +37,7 @@ class EmailValidatorTest extends TestCase
      * @return void
      * @dataProvider validValuesProvider
      */
-    public function testWithValidValues($value, $excepted)
+    public function testWithValidValues($value, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value));
     }
@@ -48,7 +48,7 @@ class EmailValidatorTest extends TestCase
      * @return void
      * @dataProvider invalidValuesProvider
      */
-    public function testWithInvalidValues($value, $excepted)
+    public function testWithInvalidValues($value, $excepted): void
     {
         $this->expectException(ValidationException::class);
         $this->assertSame($excepted, $this->getValidator()->validate($value));
@@ -56,32 +56,32 @@ class EmailValidatorTest extends TestCase
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  mixed $excepted
      * @return void
      * @dataProvider validValuesWithOptionsProvider
      */
-    public function testWithValidValueAndDefaultValues($value, array $options, $excepted)
+    public function testWithValidValueAndDefaultValues($value, array $options, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
      * @param  mixed $value
-     * @param  array $options
+     * @param  array<string,string|null|int|float|bool> $options
      * @param  mixed $excepted
      * @return void
      * @dataProvider invalidValuesWithOptionsProvider
      */
-    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted)
+    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted): void
     {
         $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider()
+    public function validValuesProvider(): array
     {
         return [
             ['test@localhost.com',           'test@localhost.com'],
@@ -95,9 +95,9 @@ class EmailValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider()
+    public function invalidValuesProvider(): array
     {
         return [
             ['Test Example <test@example.com>', false],
@@ -109,9 +109,9 @@ class EmailValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null>>>
      */
-    public function validValuesWithOptionsProvider()
+    public function validValuesWithOptionsProvider(): array
     {
         $default = 'test@example.com';
         $options = ['default' => $default];
@@ -128,9 +128,9 @@ class EmailValidatorTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<array<string|bool|int|float|null|array<string,string|null>>>
      */
-    public function invalidValuesWithOptionsProvider()
+    public function invalidValuesWithOptionsProvider(): array
     {
         $default = null;
         $options = ['default' => $default];
