@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Eureka\Component\Validation\Validator;
 
+use Eureka\Component\Validation\Exception\ValidationException;
+
 /**
  * Class BooleanValidator
  *

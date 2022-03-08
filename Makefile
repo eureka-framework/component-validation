@@ -39,7 +39,7 @@ build/reports/phpstan:
 #~ main commands
 phpcs: vendor/bin/phpcs build/reports/phpcs
 	$(call header,Checking Code Style)
-	@./vendor/bin/phpcs --standard=./ci/phpcs/eureka.xml --cache=./build/cs_deezer.cache -p --report-full --report-checkstyle=./build/reports/cs/eureka.xml src/ tests/
+	@./vendor/bin/phpcs --standard=./ci/phpcs/eureka.xml --cache=./build/cs_eureka.cache -p --report-full --report-checkstyle=./build/reports/cs/eureka.xml src/ tests/
 
 phpcbf: vendor/bin/phpcbf
 	$(call header,Fixing Code Style)

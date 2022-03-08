@@ -21,6 +21,8 @@ use Eureka\Component\Validation\ValidatorInterface;
  */
 class DateValidator extends AbstractValidator implements ValidatorInterface
 {
+    use DateTimeTrait;
+
     /**
      * @param  string $value
      * @param  array<string,string> $options
@@ -29,24 +31,6 @@ class DateValidator extends AbstractValidator implements ValidatorInterface
      */
     public function validate($value, array $options = [], ?int $flags = null): ?string
     {
-        if (!isset($options['format'])) {
-            $options['format'] = 'Y-m-d';
-        }
-
-        if (!isset($options['format_output'])) {
-            $options['format_output'] = 'Y-m-d';
-        }
-
-        $date = \DateTimeImmutable::createFromFormat($options['format'], (string) $value);
-
-        if (! $date instanceof \DateTimeImmutable) {
-            if (!array_key_exists('default', $options)) {
-                throw new ValidationException('Given value is not a valid date according to following format: "' . $options['format'] . '"!');
-            }
-
-            return $options['default'];
-        }
-
-        return $date->format($options['format_output']);
+        return $this->getDateOrDefault($value, $options, 'Y-m-d');
     }
 }
