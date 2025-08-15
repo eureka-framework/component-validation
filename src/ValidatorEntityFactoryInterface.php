@@ -11,16 +11,11 @@ declare(strict_types=1);
 
 namespace Eureka\Component\Validation;
 
-/**
- * Class ValidatorEntityFactoryInterface
- *
- * @author Romain Cottard
- */
 interface ValidatorEntityFactoryInterface
 {
     /**
-     * @param array<string,mixed> $config
-     * @param array<string,mixed> $data
+     * @param array<string, array<string, array<string, int|float|bool|string|null>|int|float|bool|string|null>> $config
+     * @param array<string, int|float|bool|string|null> $data
      * @return Entity\GenericEntity
      */
     public function createGeneric(array $config, array $data = []): Entity\GenericEntity;

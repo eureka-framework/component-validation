@@ -12,18 +12,15 @@ declare(strict_types=1);
 namespace Eureka\Component\Validation;
 
 /**
- * Interface Validator for Validator classes
- *
- * @author Romain Cottard
+ * @phpstan-type OptionsType array<string,string|null|int|float|bool>
  */
 interface ValidatorInterface
 {
     /**
      * @param mixed $value Value to validate
-     * @param array<string,string|null|int|float|bool> $options
+     * @param OptionsType $options
      * @param int|null   $flags Validation flag. If null, use default flag or validator default flag.
-     * @return mixed Return value
      * @throws \RuntimeException
      */
-    public function validate($value, array $options = [], int $flags = null);
+    public function validate(mixed $value, array $options = [], ?int $flags = null): string|float|int|bool|null;
 }

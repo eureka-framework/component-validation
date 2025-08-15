@@ -1,5 +1,10 @@
+includes:
+  - ./vendor/phpstan/phpstan-phpunit/extension.neon
+  - ./vendor/phpstan/phpstan-phpunit/rules.neon
+  - ./vendor/phpstan/phpstan-strict-rules/rules.neon
+
 parameters:
-  phpVersion: 70400 # PHP 7.4 - Current minimal version supported
+  phpVersion: 80300
   level: max
   paths:
     - ./src
@@ -7,6 +12,8 @@ parameters:
 
   bootstrapFiles:
     - ./vendor/autoload.php
+
+  treatPhpDocTypesAsCertain: false
 
   ignoreErrors:
     - '#Call to an undefined method Eureka\\Component\\Validation\\Entity\\GenericEntity::.+\(\).#'

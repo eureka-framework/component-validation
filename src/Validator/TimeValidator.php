@@ -15,22 +15,21 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class TimeValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class TimeValidator extends AbstractValidator implements ValidatorInterface
 {
     use DateTimeTrait;
 
     /**
-     * @param  string $value
-     * @param  array<string,string> $options
-     * @param  int|null $flags Not used here.
-     * @return string|null Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null): ?string
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?string
     {
+        if (!\is_string($value)) {
+            throw new ValidationException('Value must be a string');
+        }
+
         return $this->getDateOrDefault($value, $options, 'H:i:s');
     }
 }

@@ -15,24 +15,23 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class RegexpValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class RegexpValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @param  mixed $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?string
     {
-        $filteredValue = filter_var($value, FILTER_VALIDATE_REGEXP, $this->getOptions($options, FILTER_DEFAULT));
+        $filteredValue = \filter_var($value, FILTER_VALIDATE_REGEXP, $this->getOptions($options));
 
-        if (false === $filteredValue) {
+        if ($filteredValue === false) {
             throw new ValidationException('Given value is not a valid value according to the given regexp!');
+        }
+
+        if ($filteredValue !== null && !\is_string($filteredValue)) {
+            throw new ValidationException('Optional value must be a string or null!');
         }
 
         return $filteredValue;

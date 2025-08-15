@@ -15,26 +15,25 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class IpValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class IpValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @param  mixed $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?string
     {
         $flags = ($flags === null ? FILTER_FLAG_IPV4 : $flags);
 
-        $filteredValue = filter_var($value, FILTER_VALIDATE_IP, $this->getOptions($options, $flags));
+        $filteredValue = \filter_var($value, FILTER_VALIDATE_IP, $this->getOptions($options, $flags));
 
-        if (false === $filteredValue) {
+        if ($filteredValue === false) {
             throw new ValidationException('Given value is not a valid IP!');
+        }
+
+        if ($filteredValue !== null && !\is_string($filteredValue)) {
+            throw new ValidationException('Optional value must be a string or null!');
         }
 
         return $filteredValue;

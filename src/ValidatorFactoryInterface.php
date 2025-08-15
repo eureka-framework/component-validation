@@ -11,16 +11,7 @@ declare(strict_types=1);
 
 namespace Eureka\Component\Validation;
 
-/**
- * Interface Validator Factory for Validator Factory classes
- *
- * @author Romain Cottard
- */
 interface ValidatorFactoryInterface
 {
-    /**
-     * @param  string $type
-     * @return ValidatorInterface
-     */
     public function getValidator(string $type): ValidatorInterface;
 }

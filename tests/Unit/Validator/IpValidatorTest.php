@@ -9,11 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\IpValidator;
 use Eureka\Component\Validation\ValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,101 +32,70 @@ class IpValidatorTest extends TestCase
         return new IpValidator();
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesProvider
-     */
-    public function testWithValidValues($value, $excepted): void
+    #[DataProvider('validValuesProvider')]
+    public function testWithValidValues(mixed $value, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesProvider
-     */
-    public function testWithInvalidValues($value, $excepted): void
+    #[DataProvider('invalidValuesProvider')]
+    public function testWithInvalidValues(mixed $value, mixed $excepted): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesWithOptionsProvider
      */
-    public function testWithValidValueAndDefaultValues($value, array $options, $excepted): void
+    #[DataProvider('validValuesWithOptionsProvider')]
+    public function testWithValidValueAndDefaultValues(mixed $value, array $options, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesWithOptionsProvider
      */
-    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted): void
+    #[DataProvider('invalidValuesWithOptionsProvider')]
+    public function testWithInvalidValueAndDefaultValues(mixed $value, array $options, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
-    /**
-     * @return void
-     */
     public function testIpNotInReservedNorPrivateRangesWithPublicIp(): void
     {
-        $this->assertSame('193.1.2.3', $this->getValidator()->validate('193.1.2.3', [], FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
+        self::assertSame('193.1.2.3', $this->getValidator()->validate('193.1.2.3', [], FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE));
     }
 
-    /**
-     * @return void
-     */
     public function testIpNotInReservedRangeWithReservedIp(): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame('240.0.0.1', $this->getValidator()->validate('240.0.0.1', [], FILTER_FLAG_NO_RES_RANGE));
+        self::assertSame('240.0.0.1', $this->getValidator()->validate('240.0.0.1', [], FILTER_FLAG_NO_RES_RANGE));
     }
 
-    /**
-     * @return void
-     */
     public function testIpNotInPrivateRangeWithPrivateIp(): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame('172.16.0.1', $this->getValidator()->validate('172.16.0.1', [], FILTER_FLAG_NO_PRIV_RANGE));
+        self::assertSame('172.16.0.1', $this->getValidator()->validate('172.16.0.1', [], FILTER_FLAG_NO_PRIV_RANGE));
     }
 
-    /**
-     * @return void
-     */
     public function testIpV6WithValidValue(): void
     {
-        $this->assertSame('2001:0db8:0000:85a3:0000:0000:ac1f:8001', $this->getValidator()->validate('2001:0db8:0000:85a3:0000:0000:ac1f:8001', [], FILTER_FLAG_IPV6));
-        $this->assertSame('2001:db8:0:85a3:0:0:ac1f:8001', $this->getValidator()->validate('2001:db8:0:85a3:0:0:ac1f:8001', [], FILTER_FLAG_IPV6));
+        self::assertSame('2001:0db8:0000:85a3:0000:0000:ac1f:8001', $this->getValidator()->validate('2001:0db8:0000:85a3:0000:0000:ac1f:8001', [], FILTER_FLAG_IPV6));
+        self::assertSame('2001:db8:0:85a3:0:0:ac1f:8001', $this->getValidator()->validate('2001:db8:0:85a3:0:0:ac1f:8001', [], FILTER_FLAG_IPV6));
     }
 
-    /**
-     * @return void
-     */
     public function testIpV6WithInvalidValue(): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame('test:0db8:0000:85a3:0000:0000:ac1f:8001', $this->getValidator()->validate('test:0db8:0000:85a3:0000:0000:ac1f:8001', [], FILTER_FLAG_IPV4));
+        self::assertSame('test:0db8:0000:85a3:0000:0000:ac1f:8001', $this->getValidator()->validate('test:0db8:0000:85a3:0000:0000:ac1f:8001', [], FILTER_FLAG_IPV4));
     }
 
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider(): array
+    public static function validValuesProvider(): array
     {
         return [
             ['192.168.0.1',     '192.168.0.1'],
@@ -137,7 +107,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider(): array
+    public static function invalidValuesProvider(): array
     {
         return [
             ['192.168.0.256',   false],
@@ -148,7 +118,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function validValuesWithOptionsProvider(): array
+    public static function validValuesWithOptionsProvider(): array
     {
         return [
             ['192.168.0.1',     ['default' => null], '192.168.0.1'],
@@ -160,7 +130,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function invalidValuesWithOptionsProvider(): array
+    public static function invalidValuesWithOptionsProvider(): array
     {
         return [
             ['192.168.0.256', ['default' => null], null],

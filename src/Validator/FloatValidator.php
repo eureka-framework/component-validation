@@ -15,24 +15,23 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class FloatValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class FloatValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @param  mixed $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?float
     {
-        $filteredValue = filter_var($value, FILTER_VALIDATE_FLOAT, $this->getOptions($options, $flags));
+        $filteredValue = \filter_var($value, FILTER_VALIDATE_FLOAT, $this->getOptions($options, $flags));
 
-        if (false === $filteredValue) {
+        if ($filteredValue === false) {
             throw new ValidationException('Given value is not a valid float!');
+        }
+
+        if ($filteredValue !== null && !\is_float($filteredValue)) {
+            throw new ValidationException('Optional value must be a float or null!');
         }
 
         return $filteredValue;

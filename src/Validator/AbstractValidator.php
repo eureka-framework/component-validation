@@ -11,19 +11,17 @@ declare(strict_types=1);
 
 namespace Eureka\Component\Validation\Validator;
 
-use Eureka\Component\Validation\Exception\ValidationException;
+use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class BooleanValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class AbstractValidator
 {
     /**
-     * @param  array<string,string|float|int|bool|null> $options
+     * @param  OptionsType $options
      * @param  int|null $flags
-     * @return array<string,int|null|array<string,string|float|int|bool|null>>
+     * @return array{options: OptionsType, flags: int|null}
      */
     protected function getOptions(array $options = [], ?int $flags = FILTER_DEFAULT): array
     {

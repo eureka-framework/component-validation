@@ -12,14 +12,15 @@ declare(strict_types=1);
 namespace Eureka\Component\Validation\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
+use Eureka\Component\Validation\ValidatorInterface;
 
+/**
+ * @phpstan-import-type OptionsType from ValidatorInterface
+ */
 trait DateTimeTrait
 {
     /**
-     * @param string $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param string $defaultFormat
-     * @return string|null
+     * @param OptionsType $options
      */
     protected function getDateOrDefault(string $value, array $options, string $defaultFormat): ?string
     {
@@ -36,7 +37,7 @@ trait DateTimeTrait
         if (! $date instanceof \DateTimeImmutable) {
             if (!array_key_exists('default', $options)) {
                 throw new ValidationException(
-                    'Given value is not a valid date or time according to following format: "' . $options['format'] . '"!'
+                    'Given value is not a valid date or time according to following format: "' . $options['format'] . '"!',
                 );
             }
 

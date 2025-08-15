@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\RegexpValidator;
@@ -37,7 +37,7 @@ class RegexpValidatorTest extends TestCase
     public function testWithValidValue(): void
     {
         $text = 'The test passed!';
-        $this->assertSame($text, $this->getValidator()->validate($text, ['regexp' => '`(.*)passed!`']));
+        self::assertSame($text, $this->getValidator()->validate($text, ['regexp' => '`(.*)passed!`']));
     }
 
     /**
@@ -47,6 +47,6 @@ class RegexpValidatorTest extends TestCase
     {
         $text = 'The test failed!';
         $this->expectException(ValidationException::class);
-        $this->assertSame($text, $this->getValidator()->validate($text, ['regexp' => '`(.+)passed(.*)`']));
+        self::assertSame($text, $this->getValidator()->validate($text, ['regexp' => '`(.+)passed(.*)`']));
     }
 }

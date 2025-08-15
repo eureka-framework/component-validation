@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Entity;
+namespace Eureka\Component\Validation\Tests\Unit\Entity;
 
 use Eureka\Component\Validation\Entity\GenericEntity;
 use Eureka\Component\Validation\Entity\ValidatorEntityFactory;
@@ -43,13 +43,13 @@ class GenericEntityTest extends TestCase
 
         $entity = new GenericEntity(new ValidatorFactory(), $config, $data);
 
-        $this->assertTrue($entity->isValid());
-        $this->assertTrue($entity->isEnabled());
-        $this->assertSame(1, $entity->getUserId());
+        self::assertTrue($entity->isValid());
+        self::assertTrue($entity->isEnabled());
+        self::assertSame(1, $entity->getUserId());
 
         $entity->setUserId(2);
-        $this->assertSame(2, $entity->getUserId());
-        $this->assertNull($entity->getAny());
+        self::assertSame(2, $entity->getUserId());
+        self::assertNull($entity->getAny());
     }
 
     public function testIHaveAnExceptionWhenITryToGetValueWithAnInvalidMethodName(): void
@@ -79,7 +79,7 @@ class GenericEntityTest extends TestCase
 
         $entity = new GenericEntity(new ValidatorFactory(), $config, $data);
 
-        $this->assertFalse($entity->isValid());
-        $this->assertCount(1, $entity->getErrors());
+        self::assertFalse($entity->isValid());
+        self::assertCount(1, $entity->getErrors());
     }
 }

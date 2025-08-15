@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\NullValidator;
@@ -36,7 +36,7 @@ class NullValidatorTest extends TestCase
      */
     public function testWithNullValue(): void
     {
-        $this->assertSame(null, $this->getValidator()->validate(null));
+        self::assertNull($this->getValidator()->validate(null));
     }
 
     /**
@@ -45,6 +45,6 @@ class NullValidatorTest extends TestCase
     public function testWithEmptyStringValue(): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame(null, $this->getValidator()->validate(''));
+        self::assertNull($this->getValidator()->validate(''));
     }
 }

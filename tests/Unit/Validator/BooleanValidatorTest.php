@@ -9,11 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\BooleanValidator;
 use Eureka\Component\Validation\ValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,68 +32,58 @@ class BooleanValidatorTest extends TestCase
         return new BooleanValidator();
     }
 
-    /**
-     * @param  mixed $value
-     * @param  bool $excepted
-     * @return void
-     * @dataProvider validTrueValuesProvider
-     */
-    public function testWithValidTrueValues($value, bool $excepted): void
+    #[DataProvider('validTrueValuesProvider')]
+    public function testWithValidTrueValues(mixed $value, bool $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
-    /**
-     * @param  mixed $value
-     * @param  bool $excepted
-     * @return void
-     * @dataProvider validFalseValuesProvider
-     */
-    public function testWithValidFalseValues($value, bool $excepted): void
+    #[DataProvider('validFalseValuesProvider')]
+    public function testWithValidFalseValues(mixed $value, bool $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
-    /**
-     * @param  mixed $value
-     * @param  bool $excepted
-     * @return void
-     * @dataProvider invalidBooleanValuesProvider
-     */
-    public function testWithInvalidBooleanValues($value, bool $excepted): void
+    #[DataProvider('invalidBooleanValuesProvider')]
+    public function testWithInvalidBooleanValuesAnd(mixed $value, bool $excepted): void
+    {
+        self::assertNull($this->getValidator()->validate($value));
+    }
+
+    #[DataProvider('invalidBooleanValuesProvider')]
+    public function testWithInvalidBooleanValuesAndValidDefaultValue(mixed $value, bool $excepted): void
+    {
+        self::assertSame($excepted, $this->getValidator()->validate($value, ['default' => $excepted]));
+    }
+
+    public function testWithInvalidBooleanValuesAndInvalidDefaultValue(): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        $this->getValidator()->validate('n', ['default' => 'false']);
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  bool $excepted
-     * @return void
-     * @dataProvider invalidBooleanValuesWithOptionsProvider
      */
-    public function testWithInvalidBooleanWithDefaultValues($value, array $options, bool $excepted): void
+    #[DataProvider('invalidBooleanValuesWithOptionsProvider')]
+    public function testWithInvalidBooleanWithDefaultValues(mixed $value, array $options, bool $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  bool $excepted
-     * @return void
-     * @dataProvider invalidBooleanValuesWithOptionsProvider
      */
-    public function testWithInvalidBooleanWithDefaultForceNullValues($value, array $options, bool $excepted): void
+    #[DataProvider('invalidBooleanValuesWithOptionsProvider')]
+    public function testWithInvalidBooleanWithDefaultForceNullValues(mixed $value, array $options, bool $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options, FILTER_NULL_ON_FAILURE));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options, FILTER_NULL_ON_FAILURE));
     }
 
     /**
      * @return array<int, array<int, string|bool|int|null>>
      */
-    public function validTrueValuesProvider(): array
+    public static function validTrueValuesProvider(): array
     {
         return [
             ['yes', true],
@@ -109,7 +100,7 @@ class BooleanValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function validFalseValuesProvider(): array
+    public static function validFalseValuesProvider(): array
     {
         return [
             ['no', false],
@@ -129,7 +120,7 @@ class BooleanValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidBooleanValuesProvider(): array
+    public static function invalidBooleanValuesProvider(): array
     {
         return [
             ['non', false],
@@ -145,7 +136,7 @@ class BooleanValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string|null|int|float|bool>>>
      */
-    public function invalidBooleanValuesWithOptionsProvider(): array
+    public static function invalidBooleanValuesWithOptionsProvider(): array
     {
         return [
             ['non', ['default' => false], false],

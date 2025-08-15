@@ -16,6 +16,4 @@ namespace Eureka\Component\Validation\Exception;
  *
  * @author Romain Cottard
  */
-class ValidationException extends \RuntimeException
-{
-}
+class ValidationException extends \RuntimeException {}
