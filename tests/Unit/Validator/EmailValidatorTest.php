@@ -9,11 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\EmailValidator;
 use Eureka\Component\Validation\ValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,57 +32,41 @@ class EmailValidatorTest extends TestCase
         return new EmailValidator();
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesProvider
-     */
-    public function testWithValidValues($value, $excepted): void
+    #[DataProvider('validValuesProvider')]
+    public function testWithValidValues(mixed $value, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesProvider
-     */
-    public function testWithInvalidValues($value, $excepted): void
+    #[DataProvider('invalidValuesProvider')]
+    public function testWithInvalidValues(mixed $value, mixed $excepted): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesWithOptionsProvider
      */
-    public function testWithValidValueAndDefaultValues($value, array $options, $excepted): void
+    #[DataProvider('validValuesWithOptionsProvider')]
+    public function testWithValidValueAndDefaultValues(mixed $value, array $options, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesWithOptionsProvider
      */
-    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted): void
+    #[DataProvider('invalidValuesWithOptionsProvider')]
+    public function testWithInvalidValueAndDefaultValues(mixed $value, array $options, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider(): array
+    public static function validValuesProvider(): array
     {
         return [
             ['test@localhost.com',           'test@localhost.com'],
@@ -97,7 +82,7 @@ class EmailValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider(): array
+    public static function invalidValuesProvider(): array
     {
         return [
             ['Test Example <test@example.com>', false],
@@ -111,7 +96,7 @@ class EmailValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string|null>>>
      */
-    public function validValuesWithOptionsProvider(): array
+    public static function validValuesWithOptionsProvider(): array
     {
         $default = 'test@example.com';
         $options = ['default' => $default];
@@ -130,7 +115,7 @@ class EmailValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string|null>>>
      */
-    public function invalidValuesWithOptionsProvider(): array
+    public static function invalidValuesWithOptionsProvider(): array
     {
         $default = null;
         $options = ['default' => $default];

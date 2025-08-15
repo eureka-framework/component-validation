@@ -9,11 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\UrlValidator;
 use Eureka\Component\Validation\ValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,33 +32,23 @@ class UrlValidatorTest extends TestCase
         return new UrlValidator();
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesProvider
-     */
-    public function testWithValidValues($value, $excepted): void
+    #[DataProvider('validValuesProvider')]
+    public function testWithValidValues(mixed $value, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesProvider
-     */
-    public function testWithInvalidValues($value, $excepted): void
+    #[DataProvider('invalidValuesProvider')]
+    public function testWithInvalidValues(mixed $value, mixed $excepted): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider(): array
+    public static function validValuesProvider(): array
     {
         return [
             ['http://www.math.uio.no.example.net/faq/compression-faq/part1.html', 'http://www.math.uio.no.example.net/faq/compression-faq/part1.html'],
@@ -78,7 +69,7 @@ class UrlValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider(): array
+    public static function invalidValuesProvider(): array
     {
         return [
 

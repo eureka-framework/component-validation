@@ -15,19 +15,14 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class NullValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class NullValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @param  mixed $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate(mixed $value, array $options = [], ?int $flags = null): null
     {
         if ($value !== null) {
             throw new ValidationException('Given value is not null!');

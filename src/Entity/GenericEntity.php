@@ -49,7 +49,7 @@ class GenericEntity
             $this->validatorConfig[self::toPascalCase($name)] = $config;
         }
 
-        if (!empty($data)) {
+        if ($data !== []) {
             $this->setFromArray($data);
         }
     }
@@ -59,7 +59,7 @@ class GenericEntity
      */
     public function isValid(): bool
     {
-        return empty($this->errors);
+        return $this->errors === [];
     }
 
     /**
@@ -102,36 +102,23 @@ class GenericEntity
     /**
      * Magic method to have getters & setters for generic entity.
      *
-     * @param  string $name
      * @param  array<int, int|float|bool|string|null> $arguments
-     * @return $this|int|float|bool|string|null
      * @throws \LogicException
      */
-    public function __call(string $name, array $arguments)
+    public function __call(string $name, array $arguments): self|int|float|bool|string|null
     {
-        $prefixOriginal  = substr($name, 0, 3);
-        $prefixAlternate = substr($name, 0, 2);
+        $prefix3Chars = \substr($name, 0, 3);
+        $prefix2Chars = \substr($name, 0, 2);
 
-        switch (true) {
-            case $prefixAlternate === 'in':
-            case $prefixAlternate === 'is':
-            case $prefixOriginal === 'has':
-                return $this->get($name);
-            case $prefixOriginal === 'get':
-                return $this->get(substr($name, 3));
-            case $prefixOriginal === 'set':
-                return $this->set(substr($name, 3), ...$arguments);
-            default:
-                throw new \LogicException('Invalid method name.');
-        }
+        return match (true) {
+            $prefix3Chars === 'has', $prefix2Chars === 'in', $prefix2Chars === 'is' => $this->get($name),
+            $prefix3Chars === 'get' => $this->get(\substr($name, 3)),
+            $prefix3Chars === 'set' => $this->set(\substr($name, 3), ...$arguments),
+            default => throw new \LogicException('Invalid method name.'),
+        };
     }
 
-    /**
-     * @param  string $name
-     * @param  int|float|bool|string|null $value
-     * @return $this
-     */
-    protected function set(string $name, $value): self
+    protected function set(string $name, int|float|bool|string|null $value): self
     {
         $name = self::toPascalCase($name);
 
@@ -150,11 +137,7 @@ class GenericEntity
         return $this;
     }
 
-    /**
-     * @param  string $name
-     * @return int|float|bool|string|null
-     */
-    protected function get(string $name)
+    protected function get(string $name): int|float|bool|string|null
     {
         $name = self::toPascalCase($name);
 
@@ -171,6 +154,6 @@ class GenericEntity
      */
     protected static function toPascalCase(string $name): string
     {
-        return strtr(ucwords(strtr($name, ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
+        return \strtr(\ucwords(\strtr($name, ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
     }
 }

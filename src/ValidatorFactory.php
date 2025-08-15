@@ -11,60 +11,30 @@ declare(strict_types=1);
 
 namespace Eureka\Component\Validation;
 
-use Eureka\Component\Validation\Validator;
-
-/**
- * Validator factory
- *
- * @author Romain Cottard
- */
 class ValidatorFactory implements ValidatorFactoryInterface
 {
     /** @var ValidatorInterface[] $validators
      */
     protected static array $validators = [];
 
-    /**
-     * @param  string $type
-     * @return ValidatorInterface
-     * @throws \LogicException
-     */
     public function getValidator(string $type): ValidatorInterface
     {
-        switch ($type) {
-            case 'boolean':
-                return $this->getBooleanValidator();
-            case 'datetime':
-                return $this->getDateTimeValidator();
-            case 'date':
-                return $this->getDateValidator();
-            case 'time':
-                return $this->getTimeValidator();
-            case 'timestamp':
-                return $this->getTimestampValidator();
-            case 'email':
-                return $this->getEmailValidator();
-            case 'float':
-            case 'double':
-            case 'decimal':
-                return $this->getFloatValidator();
-            case 'integer':
-                return $this->getIntegerValidator();
-            case 'null':
-            case '~':
-            case '':
-                return $this->getNullValidator();
-            case 'ip':
-                return $this->getIpValidator();
-            case 'regexp':
-                return $this->getRegexpValidator();
-            case 'url':
-                return $this->getUrlValidator();
-            case 'string':
-                return $this->getStringValidator();
-            default:
-                throw new \LogicException('Invalid validator type (type: ' . $type . ')');
-        }
+        return match ($type) {
+            'boolean'       => $this->getBooleanValidator(),
+            'datetime'      => $this->getDateTimeValidator(),
+            'date'          => $this->getDateValidator(),
+            'time'          => $this->getTimeValidator(),
+            'timestamp'     => $this->getTimestampValidator(),
+            'email'         => $this->getEmailValidator(),
+            'integer'       => $this->getIntegerValidator(),
+            'null', '~', '' => $this->getNullValidator(),
+            'ip'            => $this->getIpValidator(),
+            'regexp'        => $this->getRegexpValidator(),
+            'url'           => $this->getUrlValidator(),
+            'string'        => $this->getStringValidator(),
+            'float', 'double', 'decimal' => $this->getFloatValidator(),
+            default => throw new \LogicException('Invalid validator type (type: ' . $type . ')'),
+        };
     }
 
     public function getBooleanValidator(): ValidatorInterface

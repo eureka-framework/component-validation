@@ -15,28 +15,22 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class BooleanValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class BooleanValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @param mixed $value
-     * @param array<string,string|null|int|float|bool> $options
-     * @param int|null $flags
-     * @return bool|null
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null): ?bool
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?bool
     {
         if ($flags === null) {
-            $flags = !array_key_exists('default', $options) ? FILTER_NULL_ON_FAILURE : FILTER_DEFAULT;
+            $flags = !\array_key_exists('default', $options) ? \FILTER_NULL_ON_FAILURE : \FILTER_DEFAULT;
         }
 
-        /** @var bool|null $filteredValue */
-        $filteredValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, $this->getOptions($options, $flags));
+        $filteredValue = \filter_var($value, \FILTER_VALIDATE_BOOLEAN, $this->getOptions($options, $flags));
 
-        if (null === $filteredValue) {
+        if (!\is_bool($filteredValue) && $filteredValue !== null) {
             throw new ValidationException('Given value is not a valid boolean!');
         }
 

@@ -1,34 +1,36 @@
 <?xml version="1.0"?>
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.2/phpunit.xsd"
         backupGlobals="true"
-        backupStaticAttributes="false"
         colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        forceCoversAnnotation="false"
-        processIsolation="false"
-        stopOnError="false"
-        stopOnFailure="false"
-        stopOnIncomplete="false"
-        stopOnSkipped="false"
-        stopOnRisky="false"
-        timeoutForSmallTests="1"
-        timeoutForMediumTests="10"
-        timeoutForLargeTests="60"
-        verbose="false">
+        failOnEmptyTestSuite="false"
+        failOnIncomplete="true"
+        failOnRisky="true"
+        failOnWarning="true"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnPhpunitDeprecations="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        cacheDirectory="build/.phpunit.cache">
 
-  <coverage>
+  <php>
+    <ini name="error_reporting" value="E_ALL"/>
+  </php>
+
+  <source>
     <include>
       <directory>./src</directory>
     </include>
-  </coverage>
+  </source>
 
   <testsuites>
-    <testsuite name="Test suite">
-      <directory>./tests</directory>
+    <testsuite name="unit">
+      <directory>./tests/Unit</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory>./tests/Integration</directory>
     </testsuite>
   </testsuites>
 

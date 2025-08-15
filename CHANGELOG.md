@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] - 2025-08-015
+[6.0.0]: https://github.com/eureka-framework/component-validation/compare/5.3.0...6.0.0
+### Added
+- Support for PHP 8.4
+### Removed
+- Drop support for PHP 7.4, 8.0, 8.1, and 8.2
+### Changed
+- String validator now throws an exception if values has not the required length, rather than returning default value.
+- Boolean validator now return `null` if the value is not a boolean, rather than return `false`.
+- Type as enforced on validator to return appropriate type (or null if applicable)
+- CI improvements
+
+---
+
 ## [5.3.0] - 2024-02-06
 [5.3.0]: https://github.com/eureka-framework/component-validation/compare/5.2.0...5.3.0
 ### Changed

@@ -9,11 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Eureka\Component\Validation\Tests\Validator;
+namespace Eureka\Component\Validation\Tests\Unit\Validator;
 
 use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\Validator\TimeValidator;
 use Eureka\Component\Validation\ValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,57 +32,41 @@ class TimeValidatorTest extends TestCase
         return new TimeValidator();
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesProvider
-     */
-    public function testWithValidValues($value, $excepted): void
+    #[DataProvider('validValuesProvider')]
+    public function testWithValidValues(mixed $value, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
-    /**
-     * @param  mixed $value
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesProvider
-     */
-    public function testWithInvalidValues($value, $excepted): void
+    #[DataProvider('invalidValuesProvider')]
+    public function testWithInvalidValues(mixed $value, mixed $excepted): void
     {
         $this->expectException(ValidationException::class);
-        $this->assertSame($excepted, $this->getValidator()->validate($value));
+        self::assertSame($excepted, $this->getValidator()->validate($value));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider validValuesWithOptionsProvider
      */
-    public function testWithValidValueAndDefaultValues($value, array $options, $excepted): void
+    #[DataProvider('validValuesWithOptionsProvider')]
+    public function testWithValidValueAndDefaultValues(mixed $value, array $options, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
-     * @param  mixed $value
      * @param  array<string,string|null|int|float|bool> $options
-     * @param  mixed $excepted
-     * @return void
-     * @dataProvider invalidValuesWithOptionsProvider
      */
-    public function testWithInvalidValueAndDefaultValues($value, array $options, $excepted): void
+    #[DataProvider('invalidValuesWithOptionsProvider')]
+    public function testWithInvalidValueAndDefaultValues(mixed $value, array $options, mixed $excepted): void
     {
-        $this->assertSame($excepted, $this->getValidator()->validate($value, $options));
+        self::assertSame($excepted, $this->getValidator()->validate($value, $options));
     }
 
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function validValuesProvider(): array
+    public static function validValuesProvider(): array
     {
         return [
             ['00:00:00', '00:00:00'],
@@ -94,7 +79,7 @@ class TimeValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null>>
      */
-    public function invalidValuesProvider(): array
+    public static function invalidValuesProvider(): array
     {
         return [
             ['-00:00:00', false],
@@ -106,7 +91,7 @@ class TimeValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string>>>
      */
-    public function validValuesWithOptionsProvider(): array
+    public static function validValuesWithOptionsProvider(): array
     {
         $default = '00:00:00';
         $options = ['format' => 'H:i:s', 'format_output' => 'H:i:s', 'default' => $default];
@@ -116,8 +101,8 @@ class TimeValidatorTest extends TestCase
             ['23:59:59', $options, '23:59:59'],
             ['12:00:00', $options, '12:00:00'],
             ['24:00:00', $options, '00:00:00'],
-            ['23:59:59', array_merge($options, ['format_output' => 'H:i']), '23:59'],
-            ['23:59',    array_merge($options, ['format' => 'H:i']), '23:59:00'],
+            ['23:59:59', \array_merge($options, ['format_output' => 'H:i']), '23:59'],
+            ['23:59',    \array_merge($options, ['format' => 'H:i']), '23:59:00'],
             ['1:00', $options, '00:00:00'],
         ];
     }
@@ -125,15 +110,15 @@ class TimeValidatorTest extends TestCase
     /**
      * @return array<array<string|bool|int|float|null|array<string,string>>>
      */
-    public function invalidValuesWithOptionsProvider(): array
+    public static function invalidValuesWithOptionsProvider(): array
     {
         $default = '00:00:00';
         $options = ['format' => 'H:i:s', 'format_output' => 'H:i:s', 'default' => $default];
 
         return [
-            ['-10:00:00', array_merge($options, ['format' => '-H:i:s']), '10:00:00'],
-            ['10:00',     array_merge($options, ['format' => 'H:i']), '10:00:00'],
-            ['1:00',      array_merge($options, ['format' => 'h:i']), '01:00:00'],
+            ['-10:00:00', \array_merge($options, ['format' => '-H:i:s']), '10:00:00'],
+            ['10:00',     \array_merge($options, ['format' => 'H:i']), '10:00:00'],
+            ['1:00',      \array_merge($options, ['format' => 'h:i']), '01:00:00'],
         ];
     }
 }

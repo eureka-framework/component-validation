@@ -15,35 +15,34 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class IntegerValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class IntegerValidator extends AbstractValidator implements ValidatorInterface
 {
-    const TINYINT_SIGNED     = ['min_range' => -128, 'max_range' => 127];
-    const TINYINT_UNSIGNED   = ['min_range' => 0, 'max_range' => 255];
-    const SMALLINT_SIGNED    = ['min_range' => -32768, 'max_range' => 32767];
-    const SMALLINT_UNSIGNED  = ['min_range' => 0, 'max_range' => 65535];
-    const MEDIUMINT_SIGNED   = ['min_range' => -8388608, 'max_range' => 8388607];
-    const MEDIUMINT_UNSIGNED = ['min_range' => 0, 'max_range' => 16777215];
-    const INT_SIGNED         = ['min_range' => -2147483648, 'max_range' => 2147483647];
-    const INT_UNSIGNED       = ['min_range' => 0, 'max_range' => 4294967295];
-    const BIGINT_SIGNED      = ['min_range' => -9223372036854775808, 'max_range' => 9223372036854775807];
-    const BIGINT_UNSIGNED    = ['min_range' => 0, 'max_range' => 18446744073709551615];
+    public const array TINYINT_SIGNED     = ['min_range' => -128, 'max_range' => 127];
+    public const array TINYINT_UNSIGNED   = ['min_range' => 0, 'max_range' => 255];
+    public const array SMALLINT_SIGNED    = ['min_range' => -32_768, 'max_range' => 32_767];
+    public const array SMALLINT_UNSIGNED  = ['min_range' => 0, 'max_range' => 65_535];
+    public const array MEDIUMINT_SIGNED   = ['min_range' => -8_388_608, 'max_range' => 8_388_607];
+    public const array MEDIUMINT_UNSIGNED = ['min_range' => 0, 'max_range' => 16_777_215];
+    public const array INT_SIGNED         = ['min_range' => -2_147_483_648, 'max_range' => 2_147_483_647];
+    public const array INT_UNSIGNED       = ['min_range' => 0, 'max_range' => 4_294_967_295];
+    public const array BIGINT_SIGNED      = ['min_range' => -9_223_372_036_854_775_808, 'max_range' => 9_223_372_036_854_775_807];
+    public const array BIGINT_UNSIGNED    = ['min_range' => 0, 'max_range' => PHP_INT_MAX]; // PHP_INT_MAX is platform dependent, but usually it is 9_223_372_036_854_775_807 on 64-bit systems
 
     /**
-     * @param  mixed $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?int
     {
-        $filteredValue = filter_var($value, FILTER_VALIDATE_INT, $this->getOptions($options, $flags));
+        $filteredValue = \filter_var($value, FILTER_VALIDATE_INT, $this->getOptions($options, $flags));
 
-        if (false === $filteredValue) {
+        if ($filteredValue === false) {
             throw new ValidationException('Given value is not a valid integer!');
+        }
+
+        if ($filteredValue !== null && !\is_int($filteredValue)) {
+            throw new ValidationException('Optional value must be a float or null!');
         }
 
         return $filteredValue;

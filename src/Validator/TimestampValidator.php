@@ -15,27 +15,26 @@ use Eureka\Component\Validation\Exception\ValidationException;
 use Eureka\Component\Validation\ValidatorInterface;
 
 /**
- * Class TimestampValidator
- *
- * @author Romain Cottard
+ * @phpstan-import-type OptionsType from ValidatorInterface
  */
 class TimestampValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @param  mixed $value
-     * @param  array<string,string|float|int|bool|null> $options
-     * @param  int|null $flags Not used here.
-     * @return mixed Return value
+     * @param OptionsType $options
      */
-    public function validate($value, array $options = [], ?int $flags = null)
+    public function validate(mixed $value, array $options = [], ?int $flags = null): ?int
     {
         $options['min_range'] = 0;
         $options['max_range'] = 2147483647;
 
-        $filteredValue = filter_var($value, FILTER_VALIDATE_INT, $this->getOptions($options, $flags));
+        $filteredValue = \filter_var($value, \FILTER_VALIDATE_INT, $this->getOptions($options, $flags));
 
-        if (false === $filteredValue) {
+        if ($filteredValue === false) {
             throw new ValidationException('Given value is not a valid integer!');
+        }
+
+        if ($filteredValue !== null && !\is_int($filteredValue)) {
+            throw new ValidationException('Optional value must be a string or null!');
         }
 
         return $filteredValue;
