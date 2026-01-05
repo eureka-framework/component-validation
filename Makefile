@@ -2,7 +2,7 @@
 
 COMPOSER_BIN := composer
 PHP_VERSION_MIN := 8.3
-PHP_VERSION_MAX := 8.4
+PHP_VERSION_MAX := 8.5
 define header =
     @if [ -t 1 ]; then printf "\n\e[37m\e[100m  \e[104m $(1) \e[0m\n"; else printf "\n### $(1)\n"; fi
 endef
