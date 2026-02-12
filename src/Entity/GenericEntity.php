@@ -24,7 +24,7 @@ class GenericEntity
     /** @var string[] $errors */
     private array $errors = [];
 
-    /** @var array<string, int|float|bool|string|null> $data */
+    /** @var array<string, mixed> $data */
     protected array $data = [];
 
     /** @var array<string, array<string, array<string, int|float|bool|string|null>|int|float|bool|string|null>> $validatorConfig Validator config
@@ -39,7 +39,7 @@ class GenericEntity
      *
      * @param ValidatorFactoryInterface $validatorFactory
      * @param array<string, array<string, array<string, int|float|bool|string|null>|int|float|bool|string|null>> $validatorConfig
-     * @param array<string, int|float|bool|string|null> $data
+     * @param array<string, mixed> $data
      */
     public function __construct(ValidatorFactoryInterface $validatorFactory, array $validatorConfig, array $data = [])
     {
@@ -83,7 +83,7 @@ class GenericEntity
     }
 
     /**
-     * @param  array<string, int|float|bool|string|null> $data
+     * @param  array<string, mixed> $data
      * @return $this
      */
     public function setFromArray(array $data): self
@@ -102,10 +102,10 @@ class GenericEntity
     /**
      * Magic method to have getters & setters for generic entity.
      *
-     * @param  array<int, int|float|bool|string|null> $arguments
+     * @param  array<int, mixed> $arguments
      * @throws \LogicException
      */
-    public function __call(string $name, array $arguments): self|int|float|bool|string|null
+    public function __call(string $name, array $arguments): mixed
     {
         $prefix3Chars = \substr($name, 0, 3);
         $prefix2Chars = \substr($name, 0, 2);
@@ -118,7 +118,7 @@ class GenericEntity
         };
     }
 
-    protected function set(string $name, int|float|bool|string|null $value): self
+    protected function set(string $name, mixed $value): self
     {
         $name = self::toPascalCase($name);
 
@@ -137,7 +137,7 @@ class GenericEntity
         return $this;
     }
 
-    protected function get(string $name): int|float|bool|string|null
+    protected function get(string $name): mixed
     {
         $name = self::toPascalCase($name);
 
